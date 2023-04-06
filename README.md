@@ -1,3 +1,5 @@
-# Web Turing Machine Simulator Multi
+# Web Turing Machine Simulator
 
-trying to set up multi-tape and multi-track turing machines
+To Do:
+Copy outputs
+Write multiT section
