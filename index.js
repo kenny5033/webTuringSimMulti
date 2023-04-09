@@ -1,3 +1,5 @@
+document.title = "It's Turin' Time!"
+
 const inputs = document.getElementById("inputs");
 const machine = document.querySelector(".machineDiv");
 const speedInput = document.getElementById("speedSlider");
