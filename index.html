@@ -8,7 +8,7 @@
     <!--FileSaver for saving programs https://github.com/eligrey/FileSaver.js-->
     <script src="lib/FileSaver.js"></script>
 </head>
-<body onload="editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]); compile();">
+<body onload="editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]); compile(); setUpDarkMode();">
     <div class="box">
         <h1>Turing Machine Simulator</h1>
     </div>

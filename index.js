@@ -1,7 +1,11 @@
 document.title = "It's Turin' Time!"
 
-if(localStorage.getItem("darkMode") === true) {
-    toggleDarkMode();
+setUpDarkMode = () => {
+    if(localStorage.getItem("darkMode") === "true") {
+        toggleDarkMode();
+        // Needs to be set to true again to override toggle
+        localStorage.setItem("darkMode", true);
+    }
 }
 
 const inputs = document.getElementById("inputs");
@@ -274,7 +278,12 @@ toggleDarkMode = () => {
     document.body.classList.toggle("darkMode");
     inputs.classList.toggle("inputDarkMode");
     document.querySelector(".box").classList.toggle("boxDarkMode");
-    localStorage.setItem("darkMode", !localStorage.getItem("darkMode"));
+    if(localStorage.getItem("darkMode") === "true") {
+        localStorage.setItem("darkMode", false);
+    } else {
+        localStorage.setItem("darkMode", true);
+    }
+    
 }
 
 updateCurrentState = () => {
