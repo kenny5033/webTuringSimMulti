@@ -123,3 +123,7 @@ body {
 .buttonText {
     font-family: "Times New Roman", Times, serif;
 }
+
+a:visited {
+    color: #0066ff;
+}

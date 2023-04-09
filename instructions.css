@@ -59,3 +59,7 @@ span {
 p {
     margin-bottom: 40px;
 }
+
+a:visited {
+    color: #0066ff;
+}
