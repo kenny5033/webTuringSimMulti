@@ -274,7 +274,7 @@ toggleDarkMode = () => {
     document.body.classList.toggle("darkMode");
     inputs.classList.toggle("inputDarkMode");
     document.querySelector(".box").classList.toggle("boxDarkMode");
-    localStorage.setItem("darkMode", true);
+    localStorage.setItem("darkMode", !localStorage.getItem("darkMode"));
 }
 
 updateCurrentState = () => {
