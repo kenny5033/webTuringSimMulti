@@ -1,5 +1,9 @@
 document.title = "It's Turin' Time!"
 
+if(localStorage.getItem("darkMode") === true) {
+    toggleDarkMode();
+}
+
 const inputs = document.getElementById("inputs");
 const machine = document.querySelector(".machineDiv");
 const speedInput = document.getElementById("speedSlider");
@@ -270,6 +274,7 @@ toggleDarkMode = () => {
     document.body.classList.toggle("darkMode");
     inputs.classList.toggle("inputDarkMode");
     document.querySelector(".box").classList.toggle("boxDarkMode");
+    localStorage.setItem("darkMode", true);
 }
 
 updateCurrentState = () => {
