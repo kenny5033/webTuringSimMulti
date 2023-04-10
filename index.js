@@ -16,6 +16,7 @@ const loader = document.getElementById("loader");
 const tapes = document.getElementById("tapes");
 const fr = new FileReader();
 const rerunButton = document.getElementById("rerunButton");
+const copyOutputButton = document.getElementById("copyOutputButton");
 const recognizeText = document.getElementById("recognizeText");
 let mainUpdate;
 
@@ -30,26 +31,7 @@ fr.addEventListener('load', (event) => {
 
 let editor = CodeMirror(document.querySelector(".editor"), {
     lineNumbers: true,
-    tabSize: 4,
-    value: '\
-ATM // Specify start\n\
-EXAMPLE: Bitstrings that start with 0 // Machine Name\n\
-0 1 // Input Alphabet\n\
-0 1 // Tape Alphabet, blank is _\n\
-1 // Number of Tapes\n\
-1 // Numbers of Tracks on Tape 0\n\
-2 // Tape 0 is 2-way infinite\n\
-s0 // Initial State, states are seperated by spaces\n\
-s1 // Accepting State(s)\n\
-s0 0 s1 0 R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
-s0 1 s2 1 R\n\
-s1 0 s1 0 R\n\
-s1 1 s1 1 R\n\
-s2 0 s2 0 R\n\
-s2 1 s2 1 R\n\
-END // Specify end\
-'
-});
+    tabSize: 4});
 
 document.querySelector(".editor").addEventListener("keyup", () => {
     compile();
@@ -129,6 +111,7 @@ clearCells = () => {
 compile = () => {
     clearInterval(mainUpdate);
     rerunButton.disabled = true;
+    copyOutputButton.disabled = true;
     recognizeText.innerHTML = "N/A";
     totalNumberOfTracks = 0;
     let lines = editor.getValue().split("\n");
@@ -145,6 +128,8 @@ compile = () => {
         for(let i = 1; i < totalNumberOfTracks; i++) {
             inputs.innerHTML += "<input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input" + i + "\"></input><br>";
         }
+        document.getElementById("input0").addEventListener("paste", (event) => {pasteInputStrings(event);})
+
         previousTotalNumberOfTracks = totalNumberOfTracks;
         previousNumberOfTapes = numberOfTapes;
 
@@ -214,7 +199,7 @@ moveTapeRight = (tapeIdx) => {
 }
 
 moveTapeLeft = (tapeIdx) => {
-    if(infiniteDirectionsPerTape[tapeIdx] == "1") {
+    if(currentCellPerTape[tapeIdx] == 0 && infiniteDirectionsPerTape[tapeIdx] == "1") {
         crash("Segmentation Fault");
     } else {
         currentCellPerTape[tapeIdx]--;
@@ -271,6 +256,7 @@ reset = () => {
     // squares = [];
     updateCurrentState();
     rerunButton.disabled = true;
+    copyOutputButton.disabled = true;
     recognizeText.innerHTML = "N/A";
 }
 
@@ -290,7 +276,7 @@ updateCurrentState = () => {
     showCurrentState.innerHTML = "Current State: " + currentState;
 }
 
-copy = () => {
+copyCode = () => {
     navigator.clipboard.writeText(editor.getValue());
     alert("Copied program to clipboard!");
 }
@@ -395,7 +381,7 @@ interpretTransitions = (transitionToInterpret) => {
 
     // And that the next direction is either R or L
     for(let i = 0; i < newDirections.length; i++) {
-        if(newDirections[i].toLowerCase() != "r" && newDirections[i].toLowerCase() != "l") {
+        if(newDirections[i].toLowerCase() != "r" && newDirections[i].toLowerCase() != "l" && newDirections[i].toLowerCase() != "s") {
             return false;
         }
     }
@@ -428,7 +414,7 @@ doNext = (state, cellValue) => {
 
             if(instructions.nextDirectionPerTape[tapeIdx].toLowerCase() == "r") {
                 moveTapeRight(tapeIdx);
-            } else {
+            } else if(instructions.nextDirectionPerTape[tapeIdx].toLowerCase() == "l") {
                 moveTapeLeft(tapeIdx);
             }
         } 
@@ -440,6 +426,7 @@ doNext = (state, cellValue) => {
             notRecognized();
         }
         rerunButton.disabled = false;
+        copyOutputButton.disabled = false;
     }
 }
 
@@ -474,11 +461,72 @@ rerunWithCurrentOutput = () => {
     }, speed);
 }
 
+copyOutput = () => {
+    let output = "";
+    for(let tapeIdx = 0; tapeIdx < numberOfTapes; ++tapeIdx) {
+        for(let trackIdx = 0; trackIdx < numberOfTracksPerTape[tapeIdx]; ++trackIdx) {
+            output += ("tape" + tapeIdx + ".track" + trackIdx + ": ");
+            // Get left cells
+            for(let cellIdx = 0; cellIdx < leftCellsPerTapePerTrack[tapeIdx][trackIdx].length; ++cellIdx) {
+                output += leftCellsPerTapePerTrack[tapeIdx][trackIdx][leftCellsPerTapePerTrack[tapeIdx][trackIdx].length - (cellIdx + 1)];
+            }
+
+            // Get right cells
+            for(let cellIdx = 0; cellIdx < cellsPerTapePerTrack[tapeIdx][trackIdx].length; ++cellIdx) {
+                output += cellsPerTapePerTrack[tapeIdx][trackIdx][cellIdx];
+            }
+
+            output += "\n";
+        }
+    }
+    navigator.clipboard.writeText(output);
+    alert("Copied output to clipboard!")
+}
+
+pasteInputStrings = (eventInfo) => {
+    eventInfo.preventDefault();
+
+    let individualInputs = inputs.querySelectorAll("input");
+    let clipboardValue = eventInfo.clipboardData.getData("text");
+
+    // Process clipboard value
+    clipboardValue = clipboardValue.split("\n");
+    let lineCount = clipboardValue.length;
+    let values = [];
+    for(let lineIdx = 0; lineIdx < lineCount; ++lineIdx) {
+        try {
+            let line = clipboardValue[lineIdx].split(": ")[1] ?? clipboardValue[lineIdx];
+            line.trim();
+            // If line is entirly underscores (i.e. blank), only give truly blank line 
+            if(/^_*$/g.test(line)) {
+                values.push("");
+            } else {
+                values.push(line);
+            }
+        } catch {
+            break;
+        }
+    }
+
+    // Put clipboard value to inputs
+    let length = Math.min(individualInputs.length, lineCount);
+    for(let inputIdx = 0; inputIdx < length; ++inputIdx) {
+        individualInputs[inputIdx].value = values[inputIdx];
+    }
+}
+
 // Examples
 const exampleSelector = document.getElementById("exampleSelector");
+const loadExampleButton = document.getElementById("loadExampleButton");
+exampleSelector.addEventListener("change", () => {
+    loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
+});
 loadExample = () => {
     editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]);
     compile();
+    loadExampleButton.style.backgroundColor = "";
+    loadExampleButton.style.borderColor = "";
+    loadExampleButton.style.animation = "";
 }
 
 let baseExamples = new Object(null);
@@ -578,5 +626,23 @@ Quick Start // Machine Name\n\
 s0 // Initial State\n\
 s0 // Accepting State(s)\n\
 s0 0 s0 0 R // Transitions\n\
+END\
+";
+
+baseExamples["leftBitshift"] = "\
+ATM\n\
+EXAMPLE: Left Bitshift // Machine Name\n\
+0 1 // Input Alphabet\n\
+0 1 _ // Tape Alphabet, blank is _\n\
+1 // Number of Tapes\n\
+1 // Numbers of Tracks on Tape 0\n\
+1 // Tape 0 is 1-way infinite\n\
+start // Initial State\n\
+read // Accepting State(s)\n\
+start 1 read 0 R // Transitions\n\
+start 0 read 0 R\n\
+read 0 read 0 R\n\
+read 1 write 0 L\n\
+write 0 read 1 R\n\
 END\
 ";

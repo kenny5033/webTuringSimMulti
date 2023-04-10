@@ -127,3 +127,15 @@ body {
 a:visited {
     color: #0066ff;
 }
+
+@keyframes loadExampleBreathe {
+    from {
+        background-color: gold;
+        border-color: gold;
+    }
+    to {
+        background-color: darkgoldenrod;
+        border-color: darkgoldenrod;
+    }
+    
+}

@@ -25,20 +25,19 @@
             <option id="quickStart">Quick Start</option>
             <option id="bstringsStartWith0">Bitstrings that start with 0</option>
             <option id="bstringsEndWithTwo0">Bitstrings that end with two 0's</option>
-            <option id="bstringsStartWith10|00">(MT)Bitstrings that start with 10 or 00</option>
+            <option id="leftBitshift">Left Bitshift</optoin>
             <option id="bouncer">Bouncer</option>
+            <option id="bstringsStartWith10|00">(MT)Bitstrings that start with 10 or 00</option>
         </select>
-        <button onclick="loadExample()" class="buttonSideMargin">Load Example</button>
+        <button onclick="loadExample()" class="buttonSideMargin" id="loadExampleButton">Load Example</button>
 
-        <button onclick="copy()" class="buttonSideMargin">Copy</button>
+        <button onclick="copyCode()" class="buttonSideMargin">Copy</button>
         <button onclick="download()" class="buttonSideMargin">Download</button>
         <input type="file" name="load" class="buttonSideMargin" style="display:none" id="loader"></button>
         <button onclick="load()" class="buttonSideMargin">Load from File</button>
     </span>
 
     <div class="textCenter" id="inputs">
-        <label for="input">Input</label><br>
-        <input type="text" class="input spaces" name="input" id="inputString"></input><br>
     </div>
 
     <!--Speed Slider-->
@@ -53,9 +52,10 @@
         <!--<button onclick="resetButton()" class="buttonSideMargin">Reset</button>-->
     </div>
 
-    <!--Reset w/ Output Button-->
+    <!--Post Execution Buttons-->
     <div class="buttonGroup">
-        <button onclick="rerunWithCurrentOutput()" id="rerunButton">Rerun With Current Output</button>
+        <button onclick="rerunWithCurrentOutput()" id="rerunButton" class="buttonSideMargin">Rerun With Current Output</button>
+        <button onclick="copyOutput()" id="copyOutputButton" class="buttonSideMargin">Copy Output</button>
     </div>
 
     <!--Information-->
