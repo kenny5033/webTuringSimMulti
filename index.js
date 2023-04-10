@@ -165,6 +165,11 @@ compile = () => {
 </div>"
         }
     }
+    if(loadExampleGlowing) {
+        loadExampleButton.style.backgroundColor = "";
+        loadExampleButton.style.borderColor = "";
+        loadExampleButton.style.animation = "";
+    }
 }
 
 run = () => {
@@ -518,15 +523,14 @@ pasteInputStrings = (eventInfo) => {
 // Examples
 const exampleSelector = document.getElementById("exampleSelector");
 const loadExampleButton = document.getElementById("loadExampleButton");
+let loadExampleGlowing = false;
 exampleSelector.addEventListener("change", () => {
     loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
+    loadExampleGlowing = true;
 });
 loadExample = () => {
     editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]);
     compile();
-    loadExampleButton.style.backgroundColor = "";
-    loadExampleButton.style.borderColor = "";
-    loadExampleButton.style.animation = "";
 }
 
 let baseExamples = new Object(null);
