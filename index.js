@@ -323,16 +323,30 @@ crash = (errorMessage) => {
 }
 
 findWilcardTransition = (state, cellValue) => {
-    // wildcardString will act as some read in value to see if there is or is not some transition function that would deal with wildcardString (given the state of the machine)
+    // wildcardString will act as some read in value to see if there is or is not some transition function 
+    // that would deal with wildcardString (given the state of the machine)
     let wildcardString = "";
-    for(let i = 0; i <= (cellValue.length - 1) / 2; ++i) {
-        wildcardString = cellValue;
-        wildcardString = wildcardString.substring(0, 2 * i) + "*" + wildcardString.substring((2 * i) + 1);
-        if(transitions[state + "," + wildcardString] != null) {
-            return transitions[state + "," + wildcardString];
+
+    // Loop checks in pattern *+B+B, B+*+B, B+B+*, *+*+B, B+*+*, *+*+*.
+    for(let wildcardCount = 1; wildcardCount <= ((cellValue.length - 1) / 2) + 1; ++wildcardCount) {
+        // Starting character will move the wildcards over to get all possible combinations
+        for(let startingCharacter = 0; startingCharacter <= ((cellValue.length - 1) / 2) - (wildcardCount - 1); ++startingCharacter) {
+
+            wildcardString = cellValue;
+
+            // Add all the wildcards
+            for(let wildcardIdx = 0; wildcardIdx < wildcardCount; ++wildcardIdx) {
+                wildcardString = wildcardString.substring(0, (startingCharacter * 2) + (wildcardIdx * 2)) + "*" + wildcardString.substring(((startingCharacter * 2) + (wildcardIdx * 2)) + 1);
+            }
+
+            console.log(wildcardString);
+            if(transitions[state + "," + wildcardString] != null) {
+                return transitions[state + "," + wildcardString];
+            }
         }
     }
-    // If there is no matching wilcard transition, give back undefined so that the machine will halt.
+
+    // If there is no matching wildcard transition, give back undefined so that the machine will halt
     return undefined;
 }
 
