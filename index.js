@@ -232,7 +232,8 @@ interpretEditor = () => {
         }
     }
 
-    startState = currentState = removeComment(lines[(2 * numberOfTapes) + 5]).split(" ");
+    startState = currentState = removeComment(lines[(2 * numberOfTapes) + 5]);
+    updateCurrentState();
     finalStates = removeComment(lines[(2 * numberOfTapes) + 6]).split(" ");
 
     // Remove the config lines, leaving only the transitions
@@ -255,7 +256,7 @@ interpretEditor = () => {
         }
     }
 
-    updateCurrentState();
+    // The program is valid
     return true;
 }
 
@@ -270,10 +271,10 @@ interpretTransitions = (transitionToInterpret) => {
         return false;
     }
 
-    // Check if the proposed next character and given character is some combination of the tape alphabet
+    // Check if the proposed read character(s) is some combination of the tape alphabet
     let givenCellChars = transitionInfo[1].split("+");
     for(let i = 0; i < givenCellChars.length; i++) {
-        if(!tapeAlphabet.includes(givenCellChars[i])){
+        if(givenCellChars[i] != "*" && !tapeAlphabet.includes(givenCellChars[i])){
             return false;
         }
     }
@@ -321,9 +322,23 @@ crash = (errorMessage) => {
     recognizeText.innerHTML = "Crashed: " + errorMessage;
 }
 
+findWilcardTransition = (state, cellValue) => {
+    // wildcardString will act as some read in value to see if there is or is not some transition function that would deal with wildcardString (given the state of the machine)
+    let wildcardString = "";
+    for(let i = 0; i <= (cellValue.length - 1) / 2; ++i) {
+        wildcardString = cellValue;
+        wildcardString = wildcardString.substring(0, 2 * i) + "*" + wildcardString.substring((2 * i) + 1);
+        if(transitions[state + "," + wildcardString] != null) {
+            return transitions[state + "," + wildcardString];
+        }
+    }
+    // If there is no matching wilcard transition, give back undefined so that the machine will halt.
+    return undefined;
+}
+
 doNext = (state, cellValue) => {
     let currentGlobalTrack = 0;
-    let instructions = transitions[state + "," + cellValue];
+    let instructions = transitions[state + "," + cellValue] ?? findWilcardTransition(state, cellValue);
 
     if(typeof instructions != "undefined") {
         currentState = instructions.nextState;

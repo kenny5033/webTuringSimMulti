@@ -13,7 +13,8 @@
     </div>
 
     <div id="inspiration">
-        <p>This project's syntax takes heavy inspiration from that found <a href="https://www.cs.binghamton.edu/~software/tm/tmdoc.html">here</a>.</p>
+        <p>This project's syntax takes heavy inspiration from that found <a
+                href="https://www.cs.binghamton.edu/~software/tm/tmdoc.html">here</a>.</p>
     </div>
     <div id="programming" class="infoText">
         <p class="sectionHeader">Programming the Machine</p>
@@ -31,7 +32,8 @@
             <span class="tabbed"> Example) "0 1" would be line 3 for a machine accepting bitstrings as input.</span><br>
             <span class="parent">Line 4) The tape alphabet, where each valid character is seperated from its nieghbor by
                 a space.</span><br>
-            <span class="tabbed parent">--Note-- To include the blank character in the tape alphabet, use 'B'.</span><br>
+            <span class="tabbed parent">--Note-- To include the blank character in the tape alphabet, use
+                'B'.</span><br>
             <span class="tabbed"> Exmaple) "0 1 B" would be line 4 for a machine able to read and write bitstrings and
                 the blank character.</span><br>
             <span>Line 5) The number of tapes (n)</span><br>
@@ -47,14 +49,17 @@
             <span>Line 5 + 2n + 3 begins the transition function section.</span><br>
             <span>There can be any number of transition functions greater than or equal to 1.</span><br>
             <span>Transition functions are written in the form "[state to be in for this function to be called]
-                [character to read for this function to be called] [new state into which transition] [new character to
+                [character(s) to read for this function to be called] [new state into which transition] [new
+                character(s) to
                 write] [direction to move tape head]"</span><br>
             <span>[character to read for this function to be called] and [new character to write] <b>need</b> to be
                 characters of the tape alphabet</span><br>
-            <span>[direction to move tape head] needs to be either "R" for right, "L" for left, or "S" for stationary.</span>
+            <span>[direction to move tape head] needs to be either "R" for right, "L" for left, or "S" for
+                stationary.</span>
         </p>
         <p>
-            <span>There should be but one overly-complex line following the transition function section. "END" (or "end"). </span>
+            <span>There should be but one overly-complex line following the transition function section. "END" (or
+                "end"). </span>
         </p>
     </div>
     <div id="running" class="infoText">
@@ -89,13 +94,15 @@
                 <b>1+0+1+0</b> nextState <b>0+1+0+1</b> R".</span><br>
             <span class="tabbed">This example will be called when the state is "initialState" and the tracks read 1, 0,
                 1, 0 from top to bottom. It will write 0, 1, 0, 1 from top to bottom.</span>
-            <span class="parent">The movement instructions for every transition function <b>need to be specified for each tape</b>. To
+            <span class="parent">The movement instructions for every transition function <b>need to be specified for
+                    each tape</b>. To
                 do so, put each instruction next to each other with a "+" in
                 between. The first instruction in that sequence will move track 0, and the last will move the last track
                 (top to bottom).</span>
             <span class="parent tabbed">Example transition function for a 2 tape, 4 track machine: "initialState
                 1+0+1+0 nextState 0+1+0+1 <b>R+L</b>".</span><br>
-            <span class="tabbed">When this transition function is called, it will move tape 0 right and tape 1 left.</span>
+            <span class="tabbed">When this transition function is called, it will move tape 0 right and tape 1
+                left.</span>
         </p>
     </div>
     <div id="misc" class="infoText">
@@ -107,7 +114,16 @@
             <span>The current program can be downloaded by pressing the "Download" button. The text file downloaded will
                 have the name as specified on Line 2.</span><br>
             <span>A downloaded text file can be loaded as the current program by pressing the "Load from File"
-                button.</span>
+                button.</span><br>
+            <span class="parent">A wildcard character can be used in the [character(s) to read for this function to be
+                called] section of any transition function for any character.</span><br>
+            <span class="tabbed parent">For example, given a machine with tape alphbet "0 1 B" (that is 0, 1, and the
+                blank
+                character), the transition function "s0 <b>*</b> s1 0 R" will run weather the machine reads 0, 1, or the
+                blank character.</span><br>
+            <span class="tabbed">Note that an explicitly defined transition function will be choosen over a wildcard
+                transition function. That is, given a machine in state "s0" reading "0", the transition function "s0 0
+                s1 1 R" <b>will have priority</b> over "s0 * s1 1 R".</span>
         </p>
     </div>
 
