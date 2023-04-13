@@ -1,3 +1,5 @@
+// Set up document
+
 document.title = "It's Turin' Time!"
 
 setUpDarkMode = () => {
@@ -18,7 +20,14 @@ const fr = new FileReader();
 const rerunButton = document.getElementById("rerunButton");
 const copyOutputButton = document.getElementById("copyOutputButton");
 const recognizeText = document.getElementById("recognizeText");
-let mainUpdate;
+const exampleSelector = document.getElementById("exampleSelector");
+const loadExampleButton = document.getElementById("loadExampleButton");
+
+let loadExampleGlowing = false;
+exampleSelector.addEventListener("change", () => {
+    loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
+    loadExampleGlowing = true;
+});
 
 loader.addEventListener('change', (event) => {
     fr.readAsText(loader.files[0]);
@@ -26,7 +35,7 @@ loader.addEventListener('change', (event) => {
 
 fr.addEventListener('load', (event) => {
     editor.setValue(event.target.result);
-    compile();
+    compileVisuals();
 });
 
 let editor = CodeMirror(document.querySelector(".editor"), {
@@ -34,8 +43,14 @@ let editor = CodeMirror(document.querySelector(".editor"), {
     tabSize: 4});
 
 document.querySelector(".editor").addEventListener("keyup", () => {
-    compile();
+    compileVisuals();
 });
+
+speedInput.addEventListener("mouseup", function() {
+    speed = 1001 - speedInput.value;
+}, false);
+
+// Engine
 
 let cellsPerTapePerTrack = [];
 let leftCellsPerTapePerTrack = [];
@@ -56,6 +71,7 @@ let transitions = Object.create(null);
 let squares = [];
 let currentState = "";
 let errorLine = 0;
+let mainUpdate;
 
 setInputToCellData = () => {
     // Used to keep track of the "global" (not in relation to tapes) number of tracks completed
@@ -80,96 +96,25 @@ setInputToCellData = () => {
     }
 }
 
-displayTracksPerTape = (tapeIdx) => {
-    let trackCount = numberOfTracksPerTape[tapeIdx];
-    for(let trackIdx = 0; trackIdx < trackCount; trackIdx++) {
-        // cell is offset by 4 because the first square in a track is 4 left from the cell over which is the head (i.e. the center square)
-        for(let squareIdx = 0, cell = (currentCellPerTape[tapeIdx] - 4); squareIdx < 9; squareIdx++, cell++) {
-            if(cell < 0) {
-                if(typeof leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(0 - (cell + 1))] != "undefined" && leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(0 - (cell + 1))] != "_") {
-                    squares[tapeIdx][trackIdx][squareIdx].innerHTML = leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(0 - (cell + 1))];
-                } else {
-                    squares[tapeIdx][trackIdx][squareIdx].innerHTML = "";
-                }
-            } else {
-                if(typeof cellsPerTapePerTrack[tapeIdx][trackIdx][cell] != "undefined" && cellsPerTapePerTrack[tapeIdx][trackIdx][cell] != "_") {
-                    squares[tapeIdx][trackIdx][squareIdx].innerHTML = cellsPerTapePerTrack[tapeIdx][trackIdx][cell];
-                } else {
-                    squares[tapeIdx][trackIdx][squareIdx].innerHTML = "";
-                }
-            }
-        }
-    }
-}
-
 clearCells = () => {
     cellsPerTapePerTrack = [];
     leftCellsPerTapePerTrack = [];
     currentCellPerTape = [];
 }
 
-compile = () => {
+reset = () => {
     clearInterval(mainUpdate);
+    clearCells();
+    inputAlphabet = [];
+    tapeAlphabet = [];
+    startState = "";
+    finalStates = [];
+    transitions = Object.create(null);
+    currentState = "";
+    updateCurrentState();
     rerunButton.disabled = true;
     copyOutputButton.disabled = true;
     recognizeText.innerHTML = "N/A";
-    totalNumberOfTracks = 0;
-    let lines = editor.getValue().split("\n");
-    numberOfTapes = removeComment(lines[4]).split(" ");
-    infiniteDirectionsPerTape = [];
-    for(let i = 0; i < numberOfTapes; i++) {
-        totalNumberOfTracks += parseInt(removeComment(lines[5 + i]).split(" "));
-        infiniteDirectionsPerTape.push(parseInt(removeComment(lines[parseInt(numberOfTapes) + 5 + i]).split(" ")));
-    }
-
-    if(totalNumberOfTracks != previousTotalNumberOfTracks || numberOfTapes != previousNumberOfTapes.toString()) {
-        inputs.innerHTML = "<label for=\"input\">Input</label><br>\n\
-        <input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input0\"></input><br>";
-        for(let i = 1; i < totalNumberOfTracks; i++) {
-            inputs.innerHTML += "<input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input" + i + "\"></input><br>";
-        }
-        document.getElementById("input0").addEventListener("paste", (event) => {pasteInputStrings(event);})
-
-        previousTotalNumberOfTracks = totalNumberOfTracks;
-        previousNumberOfTapes = numberOfTapes;
-
-        tapes.innerHTML = "";
-        numberOfTracksPerTape = [];
-        squares = [];
-        for(let i = 0; i < numberOfTapes; i++) {
-            // New array to push squares of each track into
-            squares.push([]);
-
-            numberOfTracksPerTape.push(parseInt(removeComment(lines[5 + i]).split(" ")));
-
-            // Construct the tape in html
-            for(let j = 0; j < numberOfTracksPerTape[i]; j++) {
-                tapes.innerHTML += "\
-<div class=\"machineDiv\" id=\"track" + i + j + "\">\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-    <div class=\"square\" id=\"s\"></div>\n\
-</div>\n\
-        "
-        }
-        // Add the head of the current tape
-        tapes.innerHTML += "\
-<div id=\"head\">\n\
-    <div class=\"triangle center\"></div>\n\
-</div>"
-        }
-    }
-    if(loadExampleGlowing) {
-        loadExampleButton.style.backgroundColor = "";
-        loadExampleButton.style.borderColor = "";
-        loadExampleButton.style.animation = "";
-    }
 }
 
 run = () => {
@@ -219,14 +164,14 @@ getCharAtCurrentCell = () => {
             if(currentCellPerTape[tapeIdx] < 0) {
                 // Look at left infinite cells
                 if(typeof leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(currentCellPerTape[tapeIdx] + 1)] == "undefined" || leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(currentCellPerTape[tapeIdx] + 1)] == "") {
-                    final += "_+";
+                    final += "B+";
                 } else {
                     final += leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(currentCellPerTape[tapeIdx] + 1)] + "+";
                 }
             } else {
                 // Look at right infinite cells
                 if(typeof cellsPerTapePerTrack[tapeIdx][trackIdx][currentCellPerTape[tapeIdx]] == "undefined" || cellsPerTapePerTrack[tapeIdx][trackIdx][currentCellPerTape[tapeIdx]] == "") {
-                    final += "_+";
+                    final += "B+";
                 } else {
                     final += cellsPerTapePerTrack[tapeIdx][trackIdx][currentCellPerTape[tapeIdx]] + "+";
                 }
@@ -238,47 +183,6 @@ getCharAtCurrentCell = () => {
     final = final.slice(0, -1);
     
     return(final);
-}
-
-speedInput.addEventListener("mouseup", function() {
-    speed = 1001 - speedInput.value;
-}, false);
-
-reset = () => {
-    // tapes.innerHTML = "";
-    clearInterval(mainUpdate);
-    clearCells();
-    
-    inputAlphabet = [];
-    tapeAlphabet = [];
-    // numberOfTapes = 0;
-    // numberOfTracksPerTape = [];
-    // infiniteDirectionsPerTape = [];
-    startState = "";
-    finalStates = [];
-    transitions = Object.create(null);
-    currentState = "";
-    // squares = [];
-    updateCurrentState();
-    rerunButton.disabled = true;
-    copyOutputButton.disabled = true;
-    recognizeText.innerHTML = "N/A";
-}
-
-toggleDarkMode = () => {
-    document.body.classList.toggle("darkMode");
-    inputs.classList.toggle("inputDarkMode");
-    document.querySelector(".box").classList.toggle("boxDarkMode");
-    if(localStorage.getItem("darkMode") === "true") {
-        localStorage.setItem("darkMode", false);
-    } else {
-        localStorage.setItem("darkMode", true);
-    }
-    
-}
-
-updateCurrentState = () => {
-    showCurrentState.innerHTML = "Current State: " + currentState;
 }
 
 copyCode = () => {
@@ -299,7 +203,12 @@ load = () => {
     loader.click();
 }
 
-// Interpretation
+// Engine: Interpretation
+
+removeComment = (lineToParse) => {
+    return lineToParse.split("//")[0].trim();
+}
+
 interpretEditor = () => {
     let lines = editor.getValue().split("\n");
     // Bounds check
@@ -395,11 +304,23 @@ interpretTransitions = (transitionToInterpret) => {
     return true;
 }
 
-removeComment = (lineToParse) => {
-    return lineToParse.split("//")[0].trim();
+// Engine: Executing the machine
+
+recognized = () => {
+    clearInterval(mainUpdate);
+    recognizeText.innerHTML = "Recognized";
 }
 
-// Executing the machine
+notRecognized = () => {
+    clearInterval(mainUpdate);
+    recognizeText.innerHTML = "Not Recognized";
+}
+
+crash = (errorMessage) => {
+    clearInterval(mainUpdate);
+    recognizeText.innerHTML = "Crashed: " + errorMessage;
+}
+
 doNext = (state, cellValue) => {
     let currentGlobalTrack = 0;
     let instructions = transitions[state + "," + cellValue];
@@ -433,21 +354,6 @@ doNext = (state, cellValue) => {
         rerunButton.disabled = false;
         copyOutputButton.disabled = false;
     }
-}
-
-recognized = () => {
-    clearInterval(mainUpdate);
-    recognizeText.innerHTML = "Recognized";
-}
-
-notRecognized = () => {
-    clearInterval(mainUpdate);
-    recognizeText.innerHTML = "Not Recognized";
-}
-
-crash = (errorMessage) => {
-    clearInterval(mainUpdate);
-    recognizeText.innerHTML = "Crashed: " + errorMessage;
 }
 
 rerunWithCurrentOutput = () => {
@@ -503,7 +409,7 @@ pasteInputStrings = (eventInfo) => {
             let line = clipboardValue[lineIdx].split(": ")[1] ?? clipboardValue[lineIdx];
             line.trim();
             // If line is entirly underscores (i.e. blank), only give truly blank line 
-            if(/^_*$/g.test(line)) {
+            if(/^B*$/g.test(line)) {
                 values.push("");
             } else {
                 values.push(line);
@@ -520,133 +426,112 @@ pasteInputStrings = (eventInfo) => {
     }
 }
 
-// Examples
-const exampleSelector = document.getElementById("exampleSelector");
-const loadExampleButton = document.getElementById("loadExampleButton");
-let loadExampleGlowing = false;
-exampleSelector.addEventListener("change", () => {
-    loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
-    loadExampleGlowing = true;
-});
 loadExample = () => {
     editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]);
-    compile();
+    compileVisuals();
 }
 
-let baseExamples = new Object(null);
-// Example keys are the id of the selection option that should load the example
-baseExamples["bstringsStartWith0"] = "\
-ATM // Specify start\n\
-EXAMPLE: Bitstrings that start with 0 // Machine Name\n\
-0 1 // Input Alphabet\n\
-0 1 // Tape Alphabet, blank is _\n\
-1 // Number of Tapes\n\
-1 // Numbers of Tracks on Tape 0\n\
-2 // Tape 0 is 2-way infinite\n\
-s0 // Initial State, states are seperated by spaces\n\
-s1 // Accepting State(s)\n\
-s0 0 s1 0 R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
-s0 1 s2 1 R\n\
-s1 0 s1 0 R\n\
-s1 1 s1 1 R\n\
-s2 0 s2 0 R\n\
-s2 1 s2 1 R\n\
-END // Specify end\
-";
+// Visuals
 
-baseExamples["bstringsEndWithTwo0"] = "\
-ATM // Specify start\n\
-EXAMPLE: Bitstrings that end in 2 zeros // Machine Name\n\
-0 1 // Input Alphabet\n\
-0 1 ✔️ ❌ // Tape Alphabet, blank is _\n\
-1 // Number of Tapes\n\
-1 // Numbers of Tracks on Tape 0\n\
-2 // Tape 0 is 2-way infinite\n\
-s0 // Initial State, states are seperated by spaces\n\
-s2 // Accepting State(s)\n\
-s0 0 s1 ✔️ R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
-s0 1 s0 ❌ R\n\
-s1 0 s2 ✔️ R\n\
-s1 1 s0 ❌ R\n\
-s2 0 s2 ✔️ R\n\
-s2 1 s0 ❌ R\n\
-END // Specify end\
-";
+compileVisuals = () => {
+    clearInterval(mainUpdate);
+    rerunButton.disabled = true;
+    copyOutputButton.disabled = true;
+    recognizeText.innerHTML = "N/A";
+    totalNumberOfTracks = 0;
+    let lines = editor.getValue().split("\n");
+    numberOfTapes = removeComment(lines[4]).split(" ");
+    infiniteDirectionsPerTape = [];
+    for(let i = 0; i < numberOfTapes; i++) {
+        totalNumberOfTracks += parseInt(removeComment(lines[5 + i]).split(" "));
+        infiniteDirectionsPerTape.push(parseInt(removeComment(lines[parseInt(numberOfTapes) + 5 + i]).split(" ")));
+    }
 
-baseExamples["bstringsStartWith10|00"] = "\
-ATM // Specify start\n\
-EXAMPLE(MultiTrack): Bitstrings that start with 10 or 00 // Machine Name\n\
-0 1 // Input Alphabet\n\
-0 1 _ // Tape Alphabet, blank is _\n\
-2 // Number of Tapes\n\
-1 // Number of Tracks on Tape 0\n\
-2 // Number of Tracks on Tape 1\n\
-2 // Tape 0 is 2-way infinite\n\
-1 // Tape 1 is 1-way infinite\n\
-sN // Initial State, states are seperated by spaces\n\
-s10 or s00 // Accepting State(s)\n\
-sN 0+_+_ s0 0+0+_ R+R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
-sN 1+_+_ s1 1+1+_ R+R\n\
-s0 0+_+_ s00 0+0+_ R+R\n\
-s0 1+_+_ sG 1+1+_ R+R\n\
-s1 0+_+_ s10 0+0+_ R+R\n\
-s1 1+_+_ sG 1+1+_ R+R\n\
-s00 0+_+_ s00 0+0+_ R+R\n\
-s00 1+_+_ s00 1+1+_ R+R\n\
-s10 0+_+_ s10 0+0+_ R+R\n\
-s10 1+_+_ s10 1+1+_ R+R\n\
-sG 0+_+_ sG 0+0+_ R+R\n\
-sG 1+_+_ sG 1+1+_ R+R\n\
-END // Specify end\
-";
+    if(totalNumberOfTracks != previousTotalNumberOfTracks || numberOfTapes != previousNumberOfTapes.toString()) {
+        inputs.innerHTML = "<label for=\"input\">Input</label><br>\n\
+        <input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input0\"></input><br>";
+        for(let i = 1; i < totalNumberOfTracks; i++) {
+            inputs.innerHTML += "<input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input" + i + "\"></input><br>";
+        }
+        document.getElementById("input0").addEventListener("paste", (event) => {pasteInputStrings(event);})
 
-baseExamples["bouncer"] = "\
-ATM // Specify start\n\
-EXAMPLE: Bouncer // Machine Name\n\
-0 1 // Input Alphabet\n\
-0 1 _ // Tape Alphabet, blank is _\n\
-1 // Number of Tapes\n\
-1 // Numbers of Tracks on Tape 0\n\
-2 // Tape 0 is 2-way infinite\n\
-sR // Initial State, states are seperated by spaces\n\
-s0 // Accepting State(s)\n\
-sR 0 sR 0 R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
-sR 1 sR 1 R\n\
-sR _ sL 0 L\n\
-sL 0 sL 0 L\n\
-sL 1 sL 1 L\n\
-sL _ sR 1 R\n\
-END // Specify end\
-";
+        previousTotalNumberOfTracks = totalNumberOfTracks;
+        previousNumberOfTapes = numberOfTapes;
 
-baseExamples["quickStart"] = "\
-ATM\n\
-Quick Start // Machine Name\n\
-0 1 // Input Alphabet\n\
-0 1 _ // Tape Alphabet, blank is _\n\
-1 // Number of Tapes\n\
-1 // Numbers of Tracks on Tape 0\n\
-2 // Tape 0 is 2-way infinite\n\
-s0 // Initial State\n\
-s0 // Accepting State(s)\n\
-s0 0 s0 0 R // Transitions\n\
-END\
-";
+        tapes.innerHTML = "";
+        numberOfTracksPerTape = [];
+        squares = [];
+        for(let i = 0; i < numberOfTapes; i++) {
+            // New array to push squares of each track into
+            squares.push([]);
 
-baseExamples["leftBitshift"] = "\
-ATM\n\
-EXAMPLE: Left Bitshift // Machine Name\n\
-0 1 // Input Alphabet\n\
-0 1 _ // Tape Alphabet, blank is _\n\
-1 // Number of Tapes\n\
-1 // Numbers of Tracks on Tape 0\n\
-1 // Tape 0 is 1-way infinite\n\
-start // Initial State\n\
-read // Accepting State(s)\n\
-start 1 read 0 R // Transitions\n\
-start 0 read 0 R\n\
-read 0 read 0 R\n\
-read 1 write 0 L\n\
-write 0 read 1 R\n\
-END\
-";
+            numberOfTracksPerTape.push(parseInt(removeComment(lines[5 + i]).split(" ")));
+
+            // Construct the tape in html
+            for(let j = 0; j < numberOfTracksPerTape[i]; j++) {
+                tapes.innerHTML += "\
+<div class=\"machineDiv\" id=\"track" + i + j + "\">\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+    <div class=\"square\" id=\"s\"></div>\n\
+</div>\n\
+        "
+        }
+        // Add the head of the current tape
+        tapes.innerHTML += "\
+<div id=\"head\">\n\
+    <div class=\"triangle center\"></div>\n\
+</div>"
+        }
+    }
+    if(loadExampleGlowing) {
+        loadExampleButton.style.backgroundColor = "";
+        loadExampleButton.style.borderColor = "";
+        loadExampleButton.style.animation = "";
+        loadExampleGlowing = false;
+    }
+}
+
+displayTracksPerTape = (tapeIdx) => {
+    let trackCount = numberOfTracksPerTape[tapeIdx];
+    for(let trackIdx = 0; trackIdx < trackCount; trackIdx++) {
+        // cell is offset by 4 because the first square in a track is 4 left from the cell over which is the head (i.e. the center square)
+        for(let squareIdx = 0, cell = (currentCellPerTape[tapeIdx] - 4); squareIdx < 9; squareIdx++, cell++) {
+            if(cell < 0) {
+                if(typeof leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(0 - (cell + 1))] != "undefined" && leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(0 - (cell + 1))] != "B") {
+                    squares[tapeIdx][trackIdx][squareIdx].innerHTML = leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(0 - (cell + 1))];
+                } else {
+                    squares[tapeIdx][trackIdx][squareIdx].innerHTML = "";
+                }
+            } else {
+                if(typeof cellsPerTapePerTrack[tapeIdx][trackIdx][cell] != "undefined" && cellsPerTapePerTrack[tapeIdx][trackIdx][cell] != "B") {
+                    squares[tapeIdx][trackIdx][squareIdx].innerHTML = cellsPerTapePerTrack[tapeIdx][trackIdx][cell];
+                } else {
+                    squares[tapeIdx][trackIdx][squareIdx].innerHTML = "";
+                }
+            }
+        }
+    }
+}
+
+toggleDarkMode = () => {
+    document.body.classList.toggle("darkMode");
+    inputs.classList.toggle("inputDarkMode");
+    document.querySelector(".box").classList.toggle("boxDarkMode");
+    if(localStorage.getItem("darkMode") === "true") {
+        localStorage.setItem("darkMode", false);
+    } else {
+        localStorage.setItem("darkMode", true);
+    }
+    
+}
+
+updateCurrentState = () => {
+    showCurrentState.innerHTML = "Current State: " + currentState;
+}
