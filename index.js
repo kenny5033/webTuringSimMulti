@@ -371,6 +371,8 @@ doNext = (state, cellValue) => {
                 moveTapeRight(tapeIdx);
             } else if(instructions.nextDirectionPerTape[tapeIdx].toLowerCase() == "l") {
                 moveTapeLeft(tapeIdx);
+            } else {
+                displayTracksPerTape(tapeIdx);
             }
         } 
     } else {
