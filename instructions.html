@@ -43,15 +43,15 @@
                 directions needs to be specified for every tape.</span><br>
             <span>Line 5 + 2n + 1) The initial state of the machine, i.e. the state the machine will begin at when the
                 run starts.</span><br>
-            <span>Line 5 + 2n + 2) The accepting or final states of the machine.</span>
+            <span>Line 5 + 2n + 2) The accepting/final states of the machine.</span>
         </p>
         <p>
             <span>Line 5 + 2n + 3 begins the transition function section.</span><br>
-            <span>There can be any number of transition functions greater than or equal to 1.</span><br>
+            <span>There can be any number of transition functions greater than or equal to 0.</span><br>
             <span>Transition functions are written in the form "[state to be in for this function to be called]
                 [character(s) to read for this function to be called] [new state into which transition] [new
                 character(s) to
-                write] [direction to move tape head]"</span><br>
+                write] [direction(s) to move tape head(s)]"</span><br>
             <span>[character to read for this function to be called] and [new character to write] <b>need</b> to be
                 characters of the tape alphabet</span><br>
             <span>[direction to move tape head] needs to be either "R" for right, "L" for left, or "S" for

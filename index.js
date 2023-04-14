@@ -129,16 +129,18 @@ codeIsValid = () => {
     return true;
 }
 
+giveErrorMessage = (errorMessage) => {
+    alert("Issue encountered in code at line " + errorLine + "!\n" + errorMessage);
+} 
+
 run = () => {
-    stepButton.disabled = true;
-    toggleRunStop();
     
     if(codeIsValid()) {
+        stepButton.disabled = true;
+        toggleRunStop();
         mainUpdate = setInterval(function() {
             doNext(currentState, getCharAtCurrentCell());
         }, speed);
-    } else {
-        alert("Issue encountered in code at line " + errorLine + "!");
     }
 }
 
@@ -277,7 +279,7 @@ interpretEditor = () => {
     let lines = editor.getValue().split("\n");
     // Bounds check
     if(removeComment(lines[0]) != "ATM") {
-        alert("First line must specify that the program is a Turing Machine file (ATM)!");
+        alert("First line must specify that the program is a Turing Machine program (ATM)!");
         return false;
     }
     if(removeComment(lines[lines.length - 1]).toLowerCase() != "end") {
@@ -297,7 +299,6 @@ interpretEditor = () => {
     }
 
     startState = currentState = removeComment(lines[(2 * numberOfTapes) + 5]);
-    updateCurrentState();
     finalStates = removeComment(lines[(2 * numberOfTapes) + 6]).split(" ");
 
     // Remove the config lines, leaving only the transitions
@@ -315,6 +316,7 @@ interpretEditor = () => {
     for(let trackIdx = 0; trackIdx < totalNumberOfTracks; trackIdx++) {
         for(let i = 0; i < inputPerTrack[trackIdx].length; i++) {
             if(!inputAlphabet.includes(inputPerTrack[trackIdx][i])) {
+                giveErrorMessage("All characters in all input strings need to be part of the input alphabet.")
                 return false;
             }
         }
@@ -330,6 +332,7 @@ interpretEditor = () => {
 
     editorHasBeenInterpreted = true;
     inputHasBeenSet = true;
+    updateCurrentState();
     return true;
 }
 
@@ -341,35 +344,47 @@ interpretTransitions = (transitionToInterpret) => {
 
     let transitionInfo = transitionText.split(" ");
     if(transitionInfo.length != 5) {
+        giveErrorMessage("All transition functions need to have 5 parts. See instruction manuel.");
         return false;
     }
+
+    // Lex the next cell value info and next direction info
+    newCellChars = transitionInfo[3].split("+");
+    newDirections = transitionInfo[4].split("+");
 
     // Check if the proposed read character(s) is some combination of the tape alphabet
     let givenCellChars = transitionInfo[1].split("+");
     for(let i = 0; i < givenCellChars.length; i++) {
         if(givenCellChars[i] != "*" && !tapeAlphabet.includes(givenCellChars[i])){
+            giveErrorMessage("Character(s) to read need to be of the tape alphabet.");
             return false;
         }
     }
-    
-    // Parse the next cell value info and next direction info
-    newCellChars = transitionInfo[3].split("+");
-    newDirections = transitionInfo[4].split("+");
 
-    // Check that the next cell values and next directions are valid
-    if(newCellChars.length != totalNumberOfTracks || newDirections.length != numberOfTapes) {
+    // and proposed write character(s)
+    for(let i = 0; i < newCellChars.length; i++) {
+        if(!tapeAlphabet.includes(newCellChars[i])){
+            giveErrorMessage("Character(s) to write need to be of the tape alphabet.");
+            return false;
+        }
+    }
+
+    // Check that the next cell values
+    if(newCellChars.length != totalNumberOfTracks) {
+        giveErrorMessage("Count of characters to write needs to match the total count of tracks.");
         return false;
     }
 
-    for(let i = 0; i < newCellChars.length; i++) {
-        if(!tapeAlphabet.includes(newCellChars[i])){
-            return false;
-        }
+    // and next directions are valid
+    if(newDirections.length != numberOfTapes) {
+        giveErrorMessage("Count of directions to move needs to match the total count of tapes.");
+        return false;
     }
 
-    // And that the next direction is either R or L
+    // And that the next direction is either R or L or S
     for(let i = 0; i < newDirections.length; i++) {
         if(newDirections[i].toLowerCase() != "r" && newDirections[i].toLowerCase() != "l" && newDirections[i].toLowerCase() != "s") {
+            giveErrorMessage("Valid direction(s) are 'R', 'L', or 'S'");
             return false;
         }
     }
