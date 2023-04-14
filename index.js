@@ -363,7 +363,7 @@ interpretTransitions = (transitionToInterpret) => {
 
     // and proposed write character(s)
     for(let i = 0; i < newCellChars.length; i++) {
-        if(!tapeAlphabet.includes(newCellChars[i])){
+        if(!tapeAlphabet.includes(newCellChars[i]) && newCellChars[i] != "*"){
             giveErrorMessage("Character(s) to write need to be of the tape alphabet.");
             return false;
         }
@@ -448,9 +448,15 @@ doNext = (state, cellValue) => {
         for(let tapeIdx = 0; tapeIdx < numberOfTapes; tapeIdx++) {
             for(let trackIdx = 0; trackIdx < numberOfTracksPerTape[tapeIdx]; trackIdx++, currentGlobalTrack++) {
                 if(infiniteDirectionsPerTape[tapeIdx] == "2" && currentCellPerTape[tapeIdx] < 0) {
-                    leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(0 - (currentCellPerTape[tapeIdx] + 1))] = instructions.nextCellValuePerTrack[currentGlobalTrack];
+                    // Write to left track
+                    if(instructions.nextCellValuePerTrack[currentGlobalTrack] != "*") {
+                        leftCellsPerTapePerTrack[tapeIdx][trackIdx][Math.abs(0 - (currentCellPerTape[tapeIdx] + 1))] = instructions.nextCellValuePerTrack[currentGlobalTrack];
+                    }
                 } else if (currentCellPerTape[tapeIdx] >= 0) {
-                    cellsPerTapePerTrack[tapeIdx][trackIdx][currentCellPerTape[tapeIdx]] = instructions.nextCellValuePerTrack[currentGlobalTrack];
+                    // Write to right track
+                    if(instructions.nextCellValuePerTrack[currentGlobalTrack] != "*") {
+                        cellsPerTapePerTrack[tapeIdx][trackIdx][currentCellPerTape[tapeIdx]] = instructions.nextCellValuePerTrack[currentGlobalTrack];
+                    }
                 }
             }
 

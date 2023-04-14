@@ -129,9 +129,9 @@ EXAMPLE: Bitwise AND\n\
 1 // Tape 1 is 1-way infinite\n\
 read // Initial State\n\
 read // Accepting State(s)\n\
-read 0+0+* read 0+0+0 R+R // Transitions, '*' is a wildcard\n\
-read 1+0+* read 1+0+0 R+R\n\
-read 0+1+* read 0+1+0 R+R\n\
-read 1+1+* read 1+1+1 R+R\n\
+read 0+0+* read *+*+0 R+R // Transitions, '*' is a wildcard\n\
+read 1+0+* read *+*+0 R+R\n\
+read 0+1+* read *+*+0 R+R\n\
+read 1+1+* read *+*+1 R+R\n\
 END\
 ";
