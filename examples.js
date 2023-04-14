@@ -5,18 +5,18 @@ baseExamples["bstringsStartWith0"] = "\
 ATM // Specify start\n\
 EXAMPLE: Bitstrings that start with 0 // Machine Name\n\
 0 1 // Input Alphabet\n\
-0 1 // Tape Alphabet, blank is B\n\
+0 1 B // Tape Alphabet, blank is B\n\
 1 // Number of Tapes\n\
 1 // Numbers of Tracks on Tape 0\n\
 2 // Tape 0 is 2-way infinite\n\
-s0 // Initial State, states are seperated by spaces\n\
-s1 // Accepting State(s)\n\
-s0 0 s1 0 R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
-s0 1 s2 1 R\n\
-s1 0 s1 0 R\n\
-s1 1 s1 1 R\n\
-s2 0 s2 0 R\n\
-s2 1 s2 1 R\n\
+start // Initial State, states are seperated by spaces\n\
+startsWithZero // Accepting State(s)\n\
+start 0 startsWithZero 0 R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
+start 1 notStartWithZero 1 R\n\
+startsWithZero 0 startsWithZero 0 R\n\
+startsWithZero 1 startsWithZero 1 R\n\
+notStartWithZero 0 notStartWithZero 0 R\n\
+notStartWithZero 1 notStartWithZero 1 R\n\
 END // Specify end\
 ";
 
@@ -28,14 +28,14 @@ EXAMPLE: Bitstrings that end in 2 zeros // Machine Name\n\
 1 // Number of Tapes\n\
 1 // Numbers of Tracks on Tape 0\n\
 2 // Tape 0 is 2-way infinite\n\
-s0 // Initial State, states are seperated by spaces\n\
-s2 // Accepting State(s)\n\
-s0 0 s1 ✔️ R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
-s0 1 s0 ❌ R\n\
-s1 0 s2 ✔️ R\n\
-s1 1 s0 ❌ R\n\
-s2 0 s2 ✔️ R\n\
-s2 1 s0 ❌ R\n\
+noEndingZeros // Initial State, states are seperated by spaces\n\
+endingWith2Zeros // Accepting State(s)\n\
+noEndingZeros 0 endingWith1Zero ✔️ R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
+noEndingZeros 1 noEndingZeros ❌ R\n\
+endingWith1Zero 0 endingWith2Zeros ✔️ R\n\
+endingWith1Zero 1 noEndingZeros ❌ R\n\
+endingWith2Zeros 0 endingWith2Zeros ✔️ R\n\
+endingWith2Zeros 1 noEndingZeros ❌ R\n\
 END // Specify end\
 ";
 
@@ -74,14 +74,14 @@ EXAMPLE: Bouncer // Machine Name\n\
 1 // Number of Tapes\n\
 1 // Numbers of Tracks on Tape 0\n\
 2 // Tape 0 is 2-way infinite\n\
-sR // Initial State, states are seperated by spaces\n\
-s0 // Accepting State(s)\n\
-sR 0 sR 0 R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
-sR 1 sR 1 R\n\
-sR B sL 0 L\n\
-sL 0 sL 0 L\n\
-sL 1 sL 1 L\n\
-sL B sR 1 R\n\
+moveRight // Initial State, states are seperated by spaces\n\
+accept // Accepting State(s)\n\
+moveRight 0 moveRight 0 R // Transitions <state> <cell value> <next state> <next cell value> <next direction>\n\
+moveRight 1 moveRight 1 R\n\
+moveRight B moveLeft 0 L\n\
+moveLeft 0 moveLeft 0 L\n\
+moveLeft 1 moveLeft 1 L\n\
+moveLeft B moveRight 1 R\n\
 END // Specify end\
 ";
 
