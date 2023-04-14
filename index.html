@@ -49,13 +49,14 @@
 
     <!--Buttons-->
     <div class="textCenter buttonBottomMargin buttonGroup">
-        <button onclick="run()" class="buttonSideMargin buttonText" style="height: 50px; width: 100px; font-size: 24px;">Run</button>
-        <!--<button onclick="resetButton()" class="buttonSideMargin">Reset</button>-->
+        <button onclick="run()" id="runButton" class="buttonSideMargin buttonText" style="height: 50px; width: 100px; font-size: 24px;">Run</button>
+        <button onclick="step()" id="stepButton" class="buttonSideMargin buttonText" style="height: 50px; width: 100px; font-size: 24px;">Step</button>
     </div>
 
     <!--Post Execution Buttons-->
     <div class="buttonGroup">
-        <button onclick="rerunWithCurrentOutput()" id="rerunButton" class="buttonSideMargin">Rerun With Current Output</button>
+        <button onclick="reset()" id="resetButton" class="buttonSideMargin">Reset</button>
+        <button onclick="resetWithCurrentOutput()" id="resetWithOuputButton" class="buttonSideMargin">Reset With Current Output</button>
         <button onclick="copyOutput()" id="copyOutputButton" class="buttonSideMargin">Copy Output</button>
     </div>
 

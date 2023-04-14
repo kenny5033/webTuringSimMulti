@@ -41,15 +41,12 @@ input{
 .square {
     height: 50px;
     width: 50px;
-    background-color: #7a7a7a;
+    background-color: #f8f8f8;
     margin: 6px;
     text-align: center;
     line-height: 50px;
     font-weight: bold;
-}
-
-.squareDarkMode {
-    background-color: #696969;
+    color: #000711;
 }
 
 .inputDarkMode {

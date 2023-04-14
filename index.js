@@ -17,11 +17,14 @@ const showCurrentState = document.getElementById("currentState");
 const loader = document.getElementById("loader");
 const tapes = document.getElementById("tapes");
 const fr = new FileReader();
-const rerunButton = document.getElementById("rerunButton");
+const resetWithOutputButton = document.getElementById("resetWithOuputButton");
+const resetButton = document.getElementById("resetButton");
 const copyOutputButton = document.getElementById("copyOutputButton");
 const recognizeText = document.getElementById("recognizeText");
 const exampleSelector = document.getElementById("exampleSelector");
 const loadExampleButton = document.getElementById("loadExampleButton");
+const stepButton = document.getElementById("stepButton");
+const runButton = document.getElementById("runButton");
 
 let loadExampleGlowing = false;
 exampleSelector.addEventListener("change", () => {
@@ -102,7 +105,7 @@ clearCells = () => {
     currentCellPerTape = [];
 }
 
-reset = () => {
+clearMachine = () => {
     clearInterval(mainUpdate);
     clearCells();
     inputAlphabet = [];
@@ -112,35 +115,88 @@ reset = () => {
     transitions = Object.create(null);
     currentState = "";
     updateCurrentState();
-    rerunButton.disabled = true;
+    resetWithOutputButton.disabled = true;
+    resetButton.disabled = true;
     copyOutputButton.disabled = true;
     recognizeText.innerHTML = "N/A";
 }
 
-run = () => {
-    reset();
-
-    // Set up each track
-    inputPerTrack = [];
-    for(let i = 0; i < totalNumberOfTracks; i++) {
-        inputPerTrack.push(document.getElementById("input" + i).value);
+let editorHasBeenInterpreted = false;
+codeIsValid = () => {
+    if(!editorHasBeenInterpreted) {
+        return interpretEditor();
     }
+    return true;
+}
+
+run = () => {
+    stepButton.disabled = true;
+    toggleRunStop();
     
-    if(interpretEditor()) {
-        setInputToCellData();
-
-        for(let i = 0; i < numberOfTapes; i++) {
-            currentCellPerTape.push(0);
-            displayTracksPerTape(i);
-        }
-
+    if(codeIsValid()) {
         mainUpdate = setInterval(function() {
             doNext(currentState, getCharAtCurrentCell());
         }, speed);
-
     } else {
         alert("Issue encountered in code at line " + errorLine + "!");
     }
+}
+
+stop = () => {
+    clearInterval(mainUpdate);
+    toggleRunStop();
+}
+
+let inputHasBeenSet = false;
+step = () => {
+    // Makes sure the tracks have the input strings showing... helps look better
+    if(!inputHasBeenSet) {
+        interpretEditor();
+    } else {
+        if(codeIsValid()) {
+            doNext(currentState, getCharAtCurrentCell());
+        } else {
+            alert("Issue encountered in code at line " + errorLine + "!");
+        }
+    }   
+}
+
+toggleRunStop = () => {
+    if(runButton.innerHTML == "Run") {
+        // Change to Stop
+        runButton.onclick =  () => { stop(); };
+        runButton.innerHTML = "Pause";
+        
+    } else {
+        // Change to Run
+        runButton.onclick = () => { run(); };
+        stepButton.disabled = false;
+        runButton.innerHTML = "Run";
+    }
+}
+
+reset = () => {
+    interpretEditor();
+    runButton.disabled = false;
+    stepButton.disabled = false;
+}
+
+resetWithCurrentOutput = () => {
+    recognizeText.innerHTML = "N/A";
+    currentState = startState;
+    updateCurrentState();
+
+    currentCellPerTape = []
+    for(let i = 0; i < numberOfTapes; i++) {
+        currentCellPerTape.push(0);
+        displayTracksPerTape(i);
+    }
+
+    resetButton.disabled = true;
+    resetWithOutputButton.disabled = true;
+    copyOutputButton.disabled = true;
+    runButton.disabled = false;
+    stepButton.disabled = false;
 }
 
 moveTapeRight = (tapeIdx) => {
@@ -210,6 +266,14 @@ removeComment = (lineToParse) => {
 }
 
 interpretEditor = () => {
+    clearMachine();
+
+    // Set up each track
+    inputPerTrack = [];
+    for(let i = 0; i < totalNumberOfTracks; i++) {
+        inputPerTrack.push(document.getElementById("input" + i).value);
+    }
+
     let lines = editor.getValue().split("\n");
     // Bounds check
     if(removeComment(lines[0]) != "ATM") {
@@ -257,6 +321,15 @@ interpretEditor = () => {
     }
 
     // The program is valid
+    setInputToCellData();
+
+    for(let i = 0; i < numberOfTapes; i++) {
+        currentCellPerTape.push(0);
+        displayTracksPerTape(i);
+    }
+
+    editorHasBeenInterpreted = true;
+    inputHasBeenSet = true;
     return true;
 }
 
@@ -339,7 +412,6 @@ findWilcardTransition = (state, cellValue) => {
                 wildcardString = wildcardString.substring(0, (startingCharacter * 2) + (wildcardIdx * 2)) + "*" + wildcardString.substring(((startingCharacter * 2) + (wildcardIdx * 2)) + 1);
             }
 
-            console.log(wildcardString);
             if(transitions[state + "," + wildcardString] != null) {
                 return transitions[state + "," + wildcardString];
             }
@@ -377,30 +449,22 @@ doNext = (state, cellValue) => {
         } 
     } else {
         // Machine has halted
+
+        stepButton.disabled = true;
+        // Set run button back to run option;
+        runButton.onclick = () => { run(); };
+        runButton.innerHTML = "Run";
+        runButton.disabled = true;
+
         if(finalStates.includes(currentState)) {
             recognized();
         } else {
             notRecognized();
         }
-        rerunButton.disabled = false;
+        resetWithOutputButton.disabled = false;
+        resetButton.disabled = false;
         copyOutputButton.disabled = false;
     }
-}
-
-rerunWithCurrentOutput = () => {
-    recognizeText.innerHTML = "N/A";
-    currentState = startState;
-    updateCurrentState();
-
-    currentCellPerTape = []
-    for(let i = 0; i < numberOfTapes; i++) {
-        currentCellPerTape.push(0);
-        displayTracksPerTape(i);
-    }
-
-    mainUpdate = setInterval(function() {
-        doNext(currentState, getCharAtCurrentCell());
-    }, speed);
 }
 
 copyOutput = () => {
@@ -466,7 +530,8 @@ loadExample = () => {
 
 compileVisuals = () => {
     clearInterval(mainUpdate);
-    rerunButton.disabled = true;
+    resetWithOutputButton.disabled = true;
+    resetButton.disabled = true;
     copyOutputButton.disabled = true;
     recognizeText.innerHTML = "N/A";
     totalNumberOfTracks = 0;
@@ -478,6 +543,7 @@ compileVisuals = () => {
         infiniteDirectionsPerTape.push(parseInt(removeComment(lines[parseInt(numberOfTapes) + 5 + i]).split(" ")));
     }
 
+    // Set up input areas for input strings per track
     if(totalNumberOfTracks != previousTotalNumberOfTracks || numberOfTapes != previousNumberOfTapes.toString()) {
         inputs.innerHTML = "<label for=\"input\">Input</label><br>\n\
         <input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input0\"></input><br>";
@@ -527,6 +593,10 @@ compileVisuals = () => {
         loadExampleButton.style.animation = "";
         loadExampleGlowing = false;
     }
+    stepButton.disabled = false;
+    runButton.disabled = false;
+    inputHasBeenSet = false;
+    editorHasBeenInterpreted = false;
 }
 
 displayTracksPerTape = (tapeIdx) => {
@@ -555,12 +625,12 @@ toggleDarkMode = () => {
     document.body.classList.toggle("darkMode");
     inputs.classList.toggle("inputDarkMode");
     document.querySelector(".box").classList.toggle("boxDarkMode");
+
     if(localStorage.getItem("darkMode") === "true") {
         localStorage.setItem("darkMode", false);
     } else {
         localStorage.setItem("darkMode", true);
     }
-    
 }
 
 updateCurrentState = () => {
