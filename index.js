@@ -123,7 +123,7 @@ clearMachine = () => {
 
 let editorHasBeenInterpreted = false;
 codeIsValid = () => {
-    if(!editorHasBeenInterpreted) {
+    if(!editorHasBeenInterpreted || !inputHasBeenSet) {
         return interpretEditor();
     }
     return true;
@@ -526,6 +526,10 @@ loadExample = () => {
     compileVisuals();
 }
 
+unsetInput = () => {
+    inputHasBeenSet = false;
+}
+
 // Visuals
 
 compileVisuals = () => {
@@ -546,9 +550,9 @@ compileVisuals = () => {
     // Set up input areas for input strings per track
     if(totalNumberOfTracks != previousTotalNumberOfTracks || numberOfTapes != previousNumberOfTapes.toString()) {
         inputs.innerHTML = "<label for=\"input\">Input</label><br>\n\
-        <input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input0\"></input><br>";
+        <input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input0\" onclick=\"unsetInput()\"></input><br>";
         for(let i = 1; i < totalNumberOfTracks; i++) {
-            inputs.innerHTML += "<input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input" + i + "\"></input><br>";
+            inputs.innerHTML += "<input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input" + i + "\" onclick=\"unsetInput()\"></input><br>";
         }
         document.getElementById("input0").addEventListener("paste", (event) => {pasteInputStrings(event);})
 
