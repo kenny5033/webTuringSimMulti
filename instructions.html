@@ -67,11 +67,21 @@
         <p>
             <span>To run the Turing Machine, enter any string of characters from the input alphabet into the text area
                 labled "Input" (read about multiple input areas in the "Multitracking and Multitaping" section) and then
-                press the "Run" button.</span><br>
+                press the "Run" button. Additionally, the "Step" button can be used to have the machine move forward by
+                a single step.</span><br>
+            <span>Upon pressing the "Run" button, it will convert to the "Pause" button, which will pause the machine
+                and allow for stepping. The machine can pick off from its current step at any time by pressing the "Run"
+                button again.</span><br>
             <span>The speed at which the machine runs can be controlled by the slider labed "Speed".</span><br>
-            <span>Additionally, the machine may be rerun with the curent output by pressing the "Rerun With Current
-                Output" button.</span><br>
-            <span>Below the rerun button is the current state and recognized status of the input.</span><br>
+            <span>The machine may be reset after halting by pressing the "Reset" button, which will reset all tapes and
+                tracks to their defaults.</span><br>
+            <span>Additionally, the machine may be reset with the curent output by pressing the "Rerun With Current
+                Output" button, which will only reset the current state to the start state and bring all tracks back to
+                their first cell.</span><br>
+            <span>The output for all tracks may be copied to the clipboard by pressing the "Copy Output" button. The
+                information will be in the form "tape0.track0: [output for tape 0's track 0]" on seperate lines for
+                every track on each tape.</span><br>
+            <span>Below the reset and copy buttons is the current state and recognized status of the input.</span><br>
             <span>The current state of the machine will be displayed and updated when the machine's state
                 updates.</span><br>
             <span>When the machine halts, it will display the recognized status of the input.</span>
