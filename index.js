@@ -287,9 +287,9 @@ interpretEditor = () => {
         return false;
     }
 
-    inputAlphabet = removeComment(lines[2]).split(" ");
-    tapeAlphabet = removeComment(lines[3]).split(" ");
-    numberOfTapes = removeComment(lines[4]).split(" ");
+    inputAlphabet = removeComment(lines[2]).split(/\s+/);
+    tapeAlphabet = removeComment(lines[3]).split(/\s+/);
+    numberOfTapes = removeComment(lines[4]).split(/\s+/);
     
     for(let tapeIdx = 0; tapeIdx < numberOfTapes; tapeIdx++) {
         for(let trackIdx = 0; trackIdx < numberOfTracksPerTape[tapeIdx]; trackIdx++) {
@@ -299,7 +299,7 @@ interpretEditor = () => {
     }
 
     startState = currentState = removeComment(lines[(2 * numberOfTapes) + 5]);
-    finalStates = removeComment(lines[(2 * numberOfTapes) + 6]).split(" ");
+    finalStates = removeComment(lines[(2 * numberOfTapes) + 6]).split(/\s+/);
 
     // Remove the config lines, leaving only the transitions
     lines.splice(0, (2 * numberOfTapes) + 7);
@@ -342,7 +342,7 @@ interpretTransitions = (transitionToInterpret) => {
         return true;
     }
 
-    let transitionInfo = transitionText.split(" ");
+    let transitionInfo = transitionText.split(/\s+/);
     if(transitionInfo.length != 5) {
         giveErrorMessage("All transition functions need to have 5 parts. See instruction manuel.");
         return false;
@@ -567,11 +567,11 @@ compileVisuals = () => {
     recognizeText.innerHTML = "N/A";
     totalNumberOfTracks = 0;
     let lines = editor.getValue().split("\n");
-    numberOfTapes = removeComment(lines[4]).split(" ");
+    numberOfTapes = removeComment(lines[4]).split(/\s+/);
     infiniteDirectionsPerTape = [];
     for(let i = 0; i < numberOfTapes; i++) {
-        totalNumberOfTracks += parseInt(removeComment(lines[5 + i]).split(" "));
-        infiniteDirectionsPerTape.push(parseInt(removeComment(lines[parseInt(numberOfTapes) + 5 + i]).split(" ")));
+        totalNumberOfTracks += parseInt(removeComment(lines[5 + i]).split(/\s+/));
+        infiniteDirectionsPerTape.push(parseInt(removeComment(lines[parseInt(numberOfTapes) + 5 + i]).split(/\s+/)));
     }
 
     // Set up input areas for input strings per track
@@ -593,7 +593,7 @@ compileVisuals = () => {
             // New array to push squares of each track into
             squares.push([]);
 
-            numberOfTracksPerTape.push(parseInt(removeComment(lines[5 + i]).split(" ")));
+            numberOfTracksPerTape.push(parseInt(removeComment(lines[5 + i]).split(/\s+/)));
 
             // Construct the tape in html
             for(let j = 0; j < numberOfTracksPerTape[i]; j++) {
