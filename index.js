@@ -542,7 +542,13 @@ loadExample = () => {
 }
 
 unsetInput = () => {
+    clearInterval(mainUpdate);
     inputHasBeenSet = false;
+    resetButton.disabled = true;
+    resetWithOutputButton.disabled = true;
+    copyOutputButton.disabled = true;
+    runButton.disabled = false;
+    stepButton.disabled = false;
 }
 
 // Visuals
@@ -565,9 +571,9 @@ compileVisuals = () => {
     // Set up input areas for input strings per track
     if(totalNumberOfTracks != previousTotalNumberOfTracks || numberOfTapes != previousNumberOfTapes.toString()) {
         inputs.innerHTML = "<label for=\"input\">Input</label><br>\n\
-        <input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input0\" onclick=\"unsetInput()\"></input><br>";
+        <input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input0\" onchange=\"unsetInput()\"></input><br>";
         for(let i = 1; i < totalNumberOfTracks; i++) {
-            inputs.innerHTML += "<input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input" + i + "\" onclick=\"unsetInput()\"></input><br>";
+            inputs.innerHTML += "<input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input" + i + "\" onchange=\"unsetInput()\"></input><br>";
         }
         document.getElementById("input0").addEventListener("paste", (event) => {pasteInputStrings(event);})
 
