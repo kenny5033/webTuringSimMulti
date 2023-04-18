@@ -254,7 +254,7 @@ download = () => {
     let fileData = new Blob([editorData], {
         type: "text/plain;charset=utf-8"
     });
-    saveAs(fileData, fileName);
+    saveAs(fileData, fileName + ".txt");
 }
 
 load = () => {
