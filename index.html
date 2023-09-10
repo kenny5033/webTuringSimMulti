@@ -9,7 +9,7 @@
     <script src="lib/FileSaver.js"></script>
 </head>
 <body onload="editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]); compileVisuals(); setUpDarkMode();">
-    <div class="box">
+    <div class="box button-container">
         <h1>Turing Machine Simulator</h1>
     </div>
     <div style="text-align: center; margin-bottom: 15px;">
@@ -18,10 +18,11 @@
 
     <!--Editor-->
     <div class="editor centerCodeEditor editorBottomMargin"></div>
-
-    <span class="textCenter buttonBottomMargin" style="display: table; margin: auto;">
-        <label for="examples" class="buttonSideMargin">Examples: </label>
+    <span class="textCenter buttonBottomMargin dropdown" style="display: table; margin: auto;">
+        <label for="examples" class="buttonSideMargin dropdown">Examples: </label>
+        <div class="dropdown">
         <select class="buttonSideMargin buttonBottomMargin" id="exampleSelector" name="examples">
+            <div class="dropdown_menu">
             <option id="quickStart">Quick Start</option>
             <option id="bstringsStartWith0">Bitstrings that start with 0</option>
             <option id="bstringsEndWithTwo0">Bitstrings that end with two 0's</option>
@@ -29,16 +30,20 @@
             <option id="bouncer">Bouncer</option>
             <option id="bstringsStartWith10|00">(MT)Bitstrings that start with 10 or 00</option>
             <option id="bitwiseAND">(MT)Bitwise AND</option>
+            </div>
         </select>
-        <button onclick="loadExample()" class="buttonSideMargin" id="loadExampleButton">Load Example</button>
-
-        <button onclick="copyCode()" class="buttonSideMargin">Copy</button>
-        <button onclick="download()" class="buttonSideMargin">Download</button>
-        <input type="file" name="load" class="buttonSideMargin" style="display:none" id="loader"></button>
-        <button onclick="load()" class="buttonSideMargin">Load from File</button>
+        </div>
+        <div class="button-bar">
+        <button onclick="loadExample()" class="light-button" id="loadExampleButton">Load Example</button>
+        <button onclick="copyCode()" class="light-button">Copy</button>
+        <button onclick="download()" class="light-button">Download</button>
+        <input type="file" name="load" class="light-button" style="display:none" id="loader"></button>
+        <button onclick="load()" class="light-button">Load from File</button>
+        </div>
     </span>
-
-    <div class="textCenter" id="inputs">
+    </div>
+    <div class="button-container">
+        <input type="text" name="text" class="light-input" placeholder="Input" id="inputs">
     </div>
 
     <!--Speed Slider-->
@@ -48,9 +53,11 @@
     </div>
 
     <!--Buttons-->
-    <div class="textCenter buttonBottomMargin buttonGroup">
-        <button onclick="run()" id="runButton" class="buttonSideMargin buttonText" style="height: 50px; width: 100px; font-size: 24px;">Run</button>
-        <button onclick="step()" id="stepButton" class="buttonSideMargin buttonText" style="height: 50px; width: 100px; font-size: 24px;">Step</button>
+    <div class="textCenter buttonBottomMargin buttonGroup buttonSideMargin">
+        <div class="button-bar buttonGroup">
+        <button onclick="run()" id="runButton" class="light-button buttonText button-container button-sizeSmall" style="height: 50px; width: 100px; font-size: 24px;">Run</button>
+        <button onclick="step()" id="stepButton" class="light-button buttonText button-container button-sizeSmall" style="height: 50px; width: 100px; font-size: 24px;">Step</button>
+        </div>
     </div>
 
     <!--Post Execution Buttons-->
