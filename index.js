@@ -1,40 +1,31 @@
-// Set up document
-
-document.title = "It's Turin' Time!"
-
-setUpDarkMode = () => {
-    if(localStorage.getItem("darkMode") === "true") {
-        toggleDarkMode();
-        // Needs to be set to true again to override toggle
-        localStorage.setItem("darkMode", true);
-    }
-}
-
 // Ctor
 
-const inputs = document.getElementById("inputs");
-const machine = document.querySelector(".machineDiv");
-const speedInput = document.getElementById("speedSlider");
-const showCurrentState = document.getElementById("currentState");
-const loader = document.getElementById("loader");
-const tapes = document.getElementById("tapes");
+const initialize = () => {
+    const inputs = document.getElementById("inputs");
+    const machine = document.querySelector(".machineDiv");
+    const speedInput = document.getElementById("speedSlider");
+    const showCurrentState = document.getElementById("currentState");
+    const loader = document.getElementById("loader");
+    const tapes = document.getElementById("tapes");
+    const resetWithOutputButton = document.getElementById("resetWithOuputButton");
+    const resetButton = document.getElementById("resetButton");
+    const copyOutputButton = document.getElementById("copyOutputButton");
+    const recognizeText = document.getElementById("recognizeText");
+    const exampleSelector = document.getElementById("exampleSelector");
+    const loadExampleButton = document.getElementById("loadExampleButton");
+    const stepButton = document.getElementById("stepButton");
+    const runButton = document.getElementById("runButton");
+}
+
+document.addEventListener("DOMContentLoaded", initialize)
+
+let loadExampleGlowing = false;
+exampleSelector.addEventListener("change", () => {
+    loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
+    loadExampleGlowing = true;
+});
+
 const fr = new FileReader();
-const resetWithOutputButton = document.getElementById("resetWithOuputButton");
-const resetButton = document.getElementById("resetButton");
-const copyOutputButton = document.getElementById("copyOutputButton");
-const recognizeText = document.getElementById("recognizeText");
-const exampleSelector = document.getElementById("exampleSelector");
-const loadExampleButton = document.getElementById("loadExampleButton");
-const stepButton = document.getElementById("stepButton");
-const runButton = document.getElementById("runButton");
-
-// TODO: Uncomment when working
-// let loadExampleGlowing = false;
-// exampleSelector.addEventListener("change", () => {
-//     loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
-//     loadExampleGlowing = true;
-// });
-
 loader.addEventListener('change', (event) => {
     fr.readAsText(loader.files[0]);
 });
