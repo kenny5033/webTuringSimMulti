@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="updated_Index.css">
+    <!--Code Mirror for code editor https://codemirror.net/-->
+    <script src="lib/codemirror.js"></script>
+    <link rel="stylesheet" href="lib/codemirror.css">
+    <!--FileSaver for saving programs https://github.com/eligrey/FileSaver.js-->
+    <script src="lib/FileSaver.js"></script>
+</head>
+<body onload="editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]); compileVisuals(); setUpDarkMode();" class="background">
+    <!--Head-->
+    <h1 class="center-div">Turing Machine Simulator</h1>
+    <div class="center-div">
+        <a href="instructions.html">Instruction Manual</a>
+    </div>
+    <!---Editor-->
+    <div class="editor IDE"></div>
+    <!--Why doesn't this work :(
+    <div class="dropdown">
+      <label for="dropdown">Examples</label>
+      <select id="dropdown-content">
+        <option value="quickStart">Quick Start</option>
+        <option value="bstringsStartWith0">Bitstrings that start with 0</option>
+        <option value="bstringsEndWithTwo0">Bitstrings that end with two 0's</option>
+        <option value="leftBitShift">Left Bitshift</option>
+        <option value="bouncer">Bouncer</option>
+        <option value="bstringsStartWith10|00">(MT) Bitstrings that start with 10 or 00</option>
+        <option value="bitwiseAND">(MT) Bitwise AND</option>
+      </select>
+    </div>
+  -->
+</div>
+<div class="button-bar">
+<button onclick="loadExample()" class="light-button" id="loadExampleButton">Load Example</button>
+<button onclick="copyCode()" class="light-button">Copy</button>
+<button onclick="download()" class="light-button">Download</button>
+<input type="file" name="load" class="light-button" style="display:none" id="loader"></button>
+<button onclick="load()" class="light-button">Load from File</button>
+</div>
+
+<!--Scripts-->
+<script src="examples.js"></script>
+<script src="index.js"></script>
+</body>
+
+</html>

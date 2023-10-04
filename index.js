@@ -28,11 +28,12 @@ const loadExampleButton = document.getElementById("loadExampleButton");
 const stepButton = document.getElementById("stepButton");
 const runButton = document.getElementById("runButton");
 
-let loadExampleGlowing = false;
-exampleSelector.addEventListener("change", () => {
-    loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
-    loadExampleGlowing = true;
-});
+// TODO: Uncomment when working
+// let loadExampleGlowing = false;
+// exampleSelector.addEventListener("change", () => {
+//     loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
+//     loadExampleGlowing = true;
+// });
 
 loader.addEventListener('change', (event) => {
     fr.readAsText(loader.files[0]);
