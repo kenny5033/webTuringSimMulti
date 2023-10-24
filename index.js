@@ -1,6 +1,5 @@
 // Ctor
-
-const initialize = () => {
+const initialize = (parentElement) => {
     const inputs = document.getElementById("inputs");
     const machine = document.querySelector(".machineDiv");
     const speedInput = document.getElementById("speedSlider");
@@ -16,8 +15,6 @@ const initialize = () => {
     const stepButton = document.getElementById("stepButton");
     const runButton = document.getElementById("runButton");
 }
-
-document.addEventListener("DOMContentLoaded", initialize)
 
 let loadExampleGlowing = false;
 exampleSelector.addEventListener("change", () => {
