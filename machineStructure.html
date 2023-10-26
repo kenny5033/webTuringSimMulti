@@ -1,0 +1,66 @@
+<!--Editor-->
+<div class="editor centerCodeEditor editorBottomMargin"></div>
+<span class="textCenter buttonBottomMargin dropdown" style="display: table; margin: auto;">
+    <label for="examples" class="buttonSideMargin dropdown">Examples: </label>
+    <div class="dropdown">
+    <select class="buttonSideMargin buttonBottomMargin" id="exampleSelector" name="examples">
+        <div class="dropdown_menu">
+        <option id="quickStart">Quick Start</option>
+        <option id="bstringsStartWith0">Bitstrings that start with 0</option>
+        <option id="bstringsEndWithTwo0">Bitstrings that end with two 0's</option>
+        <option id="leftBitShift">Left Bitshift</optoin>
+        <option id="bouncer">Bouncer</option>
+        <option id="bstringsStartWith10|00">(MT)Bitstrings that start with 10 or 00</option>
+        <option id="bitwiseAND">(MT)Bitwise AND</option>
+        </div>
+    </select>
+    </div>
+    <div class="button-bar">
+    <button onclick="loadExample()" class="light-button" id="loadExampleButton">Load Example</button>
+    <button onclick="copyCode()" class="light-button">Copy</button>
+    <button onclick="download()" class="light-button">Download</button>
+    <input type="file" name="load" class="light-button" style="display:none" id="loader"></button>
+    <button onclick="load()" class="light-button">Load from File</button>
+    </div>
+</span>
+</div>
+<div class="button-container">
+    <input type="text" name="text" class="light-input" placeholder="Input" id="inputs">
+</div>
+
+<!--Speed Slider-->
+<div class="textCenter">
+    <label for="speedSlider">Speed:</label><br>
+    <input type="range" min="0" max="1000" value="500" id="speedSlider" name="speedSlider">
+</div>
+
+<!--Buttons-->
+<div class="textCenter buttonBottomMargin buttonGroup buttonSideMargin">
+    <div class="button-bar buttonGroup">
+    <button onclick="run()" id="runButton" class="light-button buttonText button-container button-sizeSmall" style="height: 50px; width: 100px; font-size: 24px;">Run</button>
+    <button onclick="step()" id="stepButton" class="light-button buttonText button-container button-sizeSmall" style="height: 50px; width: 100px; font-size: 24px;">Step</button>
+    </div>
+</div>
+
+<!--Post Execution Buttons-->
+<div class="buttonGroup">
+    <button onclick="reset()" id="resetButton" class="buttonSideMargin">Reset</button>
+    <button onclick="resetWithCurrentOutput()" id="resetWithOuputButton" class="buttonSideMargin">Reset With Current Output</button>
+    <button onclick="copyOutput()" id="copyOutputButton" class="buttonSideMargin">Copy Output</button>
+</div>
+
+<!--Information-->
+<div id="info">
+    <span class="textCenter">
+        <p id="currentState">Current State: </p>
+        <p id="recognizeText">N/A</p>
+    </span>
+</div>
+
+<!--Machine Graphics-->
+<div id="tapes">
+</div>
+
+<script>
+    
+</script>

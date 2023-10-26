@@ -1,5 +1,5 @@
 // Ctor
-const initialize = (parentElement) => {
+const tmInitialize = () => {
     const inputs = document.getElementById("inputs");
     const machine = document.querySelector(".machineDiv");
     const speedInput = document.getElementById("speedSlider");
