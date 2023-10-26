@@ -5,6 +5,15 @@
 .background{
     background-color: #e8e8e8;
 }
+/* Editor IDE */
+.IDE_editor{
+    justify-content: center;
+    margin-right: 350px;
+    margin-left: 350px;
+    margin-top: 20px;
+}
+
+/* Light Buttons */
 
 .button-container{
     display: flex;
@@ -171,7 +180,7 @@
     position: absolute;
     background-color: #e8e8e8;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.27)
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.27);
     padding: 12px 16px;
     z-index: 1;
 }

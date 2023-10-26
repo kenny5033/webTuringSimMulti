@@ -16,7 +16,7 @@
         <a href="instructions.html">Instruction Manual</a>
     </div>
     <!---Editor-->
-    <div class="editor IDE"></div>
+    <div class="editor IDE IDE_editor"></div>
     <!--Why doesn't this work :(
     <div class="dropdown">
       <label for="dropdown">Examples</label>
@@ -38,6 +38,34 @@
 <button onclick="download()" class="light-button">Download</button>
 <input type="file" name="load" class="light-button" style="display:none" id="loader"></button>
 <button onclick="load()" class="light-button">Load from File</button>
+</div>
+<div class="button-container">
+  <input type="text" name="text" class="light-input" placeholder="Input" id="inputs">
+</div>
+
+<!--Post Execution Buttons-->
+<div class="button-bar">
+  <button onclick="reset()" id="resetButton" class="light-button">Reset</button>
+  <button onclick="resetWithCurrentOutput()" id="resetWithOuputButton" class="light-button">Reset With Current Output</button>
+  <button onclick="copyOutput()" id="copyOutputButton" class="light-button">Copy Output</button>
+</div>
+
+<!--Speed Slider-->
+<div>
+  <label for="speedSlider">Speed:</label><br>
+  <input type="range" min="0" max="1000" value="500" id="speedSlider" name="speedSlider">
+</div>
+
+<!--Machine Graphics-->
+<div id="tapes">
+</div>
+
+<!--Information-->
+<div id="info">
+  <span class="textCenter">
+      <p id="currentState">Current State: </p>
+      <p id="recognizeText">N/A</p>
+  </span>
 </div>
 
 <!--Scripts-->
