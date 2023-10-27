@@ -1,26 +1,28 @@
-// Ctor
-const tmInitialize = () => {
-    const inputs = document.getElementById("inputs");
-    const machine = document.querySelector(".machineDiv");
-    const speedInput = document.getElementById("speedSlider");
-    const showCurrentState = document.getElementById("currentState");
-    const loader = document.getElementById("loader");
-    const tapes = document.getElementById("tapes");
-    const resetWithOutputButton = document.getElementById("resetWithOuputButton");
-    const resetButton = document.getElementById("resetButton");
-    const copyOutputButton = document.getElementById("copyOutputButton");
-    const recognizeText = document.getElementById("recognizeText");
-    const exampleSelector = document.getElementById("exampleSelector");
-    const loadExampleButton = document.getElementById("loadExampleButton");
-    const stepButton = document.getElementById("stepButton");
-    const runButton = document.getElementById("runButton");
-}
+const inputs = document.getElementById("inputs");
+const machine = document.querySelector(".machineDiv");
+const speedInput = document.getElementById("speedSlider");
+const showCurrentState = document.getElementById("currentState");
+const loader = document.getElementById("loader");
+const tapes = document.getElementById("tapes");
+const resetWithOutputButton = document.getElementById("resetWithOuputButton");
+const resetButton = document.getElementById("resetButton");
+const copyOutputButton = document.getElementById("copyOutputButton");
+const recognizeText = document.getElementById("recognizeText");
+// const exampleSelector = document.getElementById("exampleSelector");
+const loadExampleButton = document.getElementById("loadExampleButton");
+const stepButton = document.getElementById("stepButton");
+const runButton = document.getElementById("runButton");
 
 let loadExampleGlowing = false;
-exampleSelector.addEventListener("change", () => {
-    loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
-    loadExampleGlowing = true;
-});
+let exampleValue;
+const exampleSelectors = document.getElementsByName("value-radio");
+for(let selector of exampleSelectors) {
+    selector.onclick = () => {
+        exampleValue = selector.value;
+        loadExampleButton.style.animation = "1s infinite alternate loadExampleBreathe";
+        loadExampleGlowing = true;
+    }
+}
 
 const fr = new FileReader();
 loader.addEventListener('change', (event) => {
@@ -32,9 +34,10 @@ fr.addEventListener('load', (event) => {
     compileVisuals();
 });
 
-let editor = CodeMirror(document.querySelector(".editor"), {
+let editor = CodeMirror(document.getElementById("editor"), {
     lineNumbers: true,
     tabSize: 4});
+editor.setSize(null, 500);
 
 document.querySelector(".editor").addEventListener("keyup", () => {
     compileVisuals();
@@ -534,7 +537,7 @@ pasteInputStrings = (eventInfo) => {
 }
 
 loadExample = () => {
-    editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]);
+    editor.setValue(baseExamples[exampleValue]);
     compileVisuals();
 }
 
@@ -565,12 +568,12 @@ compileVisuals = () => {
         infiniteDirectionsPerTape.push(parseInt(removeComment(lines[parseInt(numberOfTapes) + 5 + i]).split(/\s+/)));
     }
 
+    console.log(numberOfTapes)
     // Set up input areas for input strings per track
     if(totalNumberOfTracks != previousTotalNumberOfTracks || numberOfTapes != previousNumberOfTapes.toString()) {
-        inputs.innerHTML = "<label for=\"input\">Input</label><br>\n\
-        <input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input0\" onchange=\"unsetInput()\"></input><br>";
+        inputs.innerHTML = "<input type=\"text\" name=\"text\" class=\"light-input\" placeholder=\"INPUT\" id=\"input0\" onchange=\"unsetInput()\"></input><br>"
         for(let i = 1; i < totalNumberOfTracks; i++) {
-            inputs.innerHTML += "<input type=\"text\" class=\"input spaces\" name=\"input\" id=\"input" + i + "\" onchange=\"unsetInput()\"></input><br>";
+            inputs.innerHTML += "<input type=\"text\" name=\"text\" class=\"light-input\" placeholder=\"INPUT\" id=\"input0\" onchange=\"unsetInput()\"></input><br>";
         }
         document.getElementById("input0").addEventListener("paste", (event) => {pasteInputStrings(event);})
 
@@ -588,6 +591,7 @@ compileVisuals = () => {
 
             // Construct the tape in html
             for(let j = 0; j < numberOfTracksPerTape[i]; j++) {
+                console.log("1");
                 tapes.innerHTML += "\
 <div class=\"machineDiv\" id=\"track" + i + j + "\">\n\
     <div class=\"square\" id=\"s\"></div>\n\

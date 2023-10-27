@@ -17,6 +17,7 @@ input{
 .instructions{
     font-size: 25px;
 }
+
 .center-div{
     text-align: center;
     margin-top: 25px;
@@ -203,6 +204,19 @@ input{
     clear: both;
 }
 
+.run_bar{
+    background-color: #e8e8e8;
+    overflow: hidden;
+    text-align: center;
+    padding: 15px;
+    border: 2px solid rgb(61, 61, 61);
+    margin-top: 20px;
+    margin-left: 650px;
+    margin-right: 650px;
+    box-shadow: 10px #000000 ;
+    box-shadow: 5px 5px 10px rgb(116, 116, 116); /* Add a box shadow */
+}
+
 .flex-container{
     display: flex;
     margin-left: 150px;
@@ -361,4 +375,63 @@ input{
     margin: 0 auto;
     margin-top: 55px; /* Center the container horizontally */
     max-width: 50%; /* Limit the container's width to 80% of the available space */
+}
+
+@keyframes loadExampleBreathe {
+    from {
+        background-color: hsl(225, 95%, 70%);
+        border-color: hsl(225, 95%, 70%);
+    }
+    to {
+        background-color: hsl(225, 100%, 86%);
+        border-color: hsl(225, 100%, 86%);
+    }
+    
+}
+
+.square {
+    height: 50px;
+    width: 50px;
+    background-color: hsl(0, 0%, 90%);
+    margin: 6px;
+    text-align: center;
+    line-height: 50px;
+    font-weight: bold;
+    color: #000711;
+    margin-top: 25px;
+    box-shadow: 5px 5px 10px rgb(116, 116, 116);
+    border: 2px solid black;
+}
+
+.triangle {
+	width: 0;
+	height: 0;
+	border-left: 25px solid transparent;
+	border-right: 25px solid transparent;
+	border-bottom: 50px solid hsl(225, 97%, 62%);
+    margin-bottom: 25px;
+}
+
+.center {
+    margin:auto;
+    width: 0%;
+}
+
+.machineDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.credits{
+    color: hsl(0, 0%, 11%);
+    margin-left: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 900;
+    margin-top: 25 px;
+}
+
+.margin-top{
+    margin-bottom: 50px;
 }
