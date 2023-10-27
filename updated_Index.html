@@ -2,24 +2,72 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="updated_Index.css">
-    <!--Code Mirror for code editor https://codemirror.net/-->
-    <script src="lib/codemirror.js"></script>
-    <link rel="stylesheet" href="lib/codemirror.css">
-    <!--FileSaver for saving programs https://github.com/eligrey/FileSaver.js-->
-    <script src="lib/FileSaver.js"></script>
+  <link rel="stylesheet" href="updated_Index.css">
+  <!--Code Mirror for code editor https://codemirror.net/-->
+  <script src="lib/codemirror.js"></script>
+  <link rel="stylesheet" href="lib/codemirror.css">
+  <!--FileSaver for saving programs https://github.com/eligrey/FileSaver.js-->
+  <script src="lib/FileSaver.js"></script>
 </head>
-<body onload="editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]); compileVisuals(); setUpDarkMode();" class="background">
-    <!--Head-->
-    <h1 class="center-div">Turing Machine Simulator</h1>
-    <div class="center-div">
-        <a href="instructions.html">Instruction Manual</a>
+
+<body
+  onload="editor.setValue(baseExamples[exampleSelector.options[exampleSelector.selectedIndex].id]); compileVisuals(); setUpDarkMode();"
+  class="background">
+  <!--Head-->
+  <h1 class="center-div turing_title">Turing Machine Simulator</h1>
+  <hr class="divider">
+  <div class="center-div instructions">
+    <a href="instructions.html">Instruction Manual</a>
+  </div>
+  <!---Editor-->
+  <div class="flex-container">
+
+    <div class="editor IDE IDE_editor block_container"></div>
+
+    <div class="block_container">
+      <div class="radio-input-wrapper">
+        <div class="label examples_text">Examples:</div> 
+        <label class="label">
+          <input value="value-2 quickStart" name="value-radio" id="value-2" class="radio-input" type="radio">
+          <div class="radio-design"></div>
+          <div class="label-text">Quick Start</div>
+        </label>
+        <label class="label">
+          <input value="value-3 bstringsStartWith0" name="value-radio" id="value-3" class="radio-input" type="radio">
+          <div class="radio-design"></div>
+          <div class="label-text">Bitstrings that start with 0</div>
+        </label>
+        <label class="label">
+          <input value="value-4 bstringsEndWithTwo0" name="value-radio" id="value-4" class="radio-input" type="radio">
+          <div class="radio-design"></div>
+          <div class="label-text">Bitstrings that end with two 0s</div>
+        </label>
+        <label class="label">
+          <input value="value-4 leftBitShift" name="value-radio" id="value-4" class="radio-input" type="radio">
+          <div class="radio-design"></div>
+          <div class="label-text">Left Bitshift</div>
+        </label>
+        <label class="label">
+          <input value="value-4 bouncer" name="value-radio" id="value-4" class="radio-input" type="radio">
+          <div class="radio-design"></div>
+          <div class="label-text">Bouncer</div>
+        </label>
+        <label class="label">
+          <input value="value-4 bstringsStartWith10|00" name="value-radio" id="value-4" class="radio-input" type="radio">
+          <div class="radio-design"></div>
+          <div class="label-text">(MT)Bitstrings that start with 10 or 00</div>
+        </label>
+        <label class="label">
+          <input value="value-4 bitwiseAND" name="value-radio" id="value-4" class="radio-input" type="radio">
+          <div class="radio-design"></div>
+          <div class="label-text">(MT) Bitwise AND</div>
+        </label>
+      </div>
     </div>
-    <!---Editor-->
-    <div class="editor IDE IDE_editor"></div>
-    <!--Why doesn't this work :(
+  </div>
+  <!--Why won't this work :(
     <div class="dropdown">
-      <label for="dropdown">Examples</label>
+      <span for="dropdown">Examples</span>
       <select id="dropdown-content">
         <option value="quickStart">Quick Start</option>
         <option value="bstringsStartWith0">Bitstrings that start with 0</option>
@@ -31,46 +79,80 @@
       </select>
     </div>
   -->
+  <!--Round 2: praying, crying, throwing up
+  <div class="drop-menu">
+    <button class="dropdown-button">Examples</button>
+    <div class="dropdown-content">
+      <a id="top" value="quickStart">Quick Start</a>
+      <a value="bstringsStartWith0">Bitstrings that start with 0</a>
+      <a value="bstringsEndWithTwo0">Bitstrings that end with two 0's</a>
+      <a value="leftBitShift">Left Bitshift</a>
+      <a value="bouncer">Bouncer</a>
+      <a value="bstringsStartWith10|00">(MT) Bitstrings that start with 10 or 00</a>
+      <a id = "bottom" value="bitwiseAND">(MT) Bitwise AND</a>
+    </div>
 </div>
-<div class="button-bar">
-<button onclick="loadExample()" class="light-button" id="loadExampleButton">Load Example</button>
-<button onclick="copyCode()" class="light-button">Copy</button>
-<button onclick="download()" class="light-button">Download</button>
-<input type="file" name="load" class="light-button" style="display:none" id="loader"></button>
-<button onclick="load()" class="light-button">Load from File</button>
+-->
+  <!--BITCH PLEASE 
+<div class="drop-menu">
+  <button class="dropdown-button">Examples</button>
+  <div class="dropdown-content">
+      <a id="quickStart" data-value="quickStart">Quick Start</a>
+      <a id="bstringsStartWith0" data-value="bstringsStartWith0">Bitstrings that start with 0</a>
+      <a id="bstringsEndWithTwo0" data-value="bstringsEndWithTwo0">Bitstrings that end with two 0's</a>
+      <a id="leftBitShift" data-value="leftBitShift">Left Bitshift</a>
+      <a id="bouncer" data-value="bouncer">Bouncer</a>
+      <a id="bstringsStartWith1000" data-value="bstringsStartWith10|00">(MT) Bitstrings that start with 10 or 00</a>
+      <a id="bitwiseAND" data-value="bitwiseAND">(MT) Bitwise AND</a>
+  </div>
 </div>
-<div class="button-container">
-  <input type="text" name="text" class="light-input" placeholder="Input" id="inputs">
+-->
+
+
+  <div class="button-bar">
+    <button onclick="loadExample()" class="light-button" id="loadExampleButton">Load Example</button>
+    <button onclick="copyCode()" class="light-button">Copy</button>
+    <button onclick="download()" class="light-button">Download</button>
+    <input type="file" name="load" class="light-button" style="display:none" id="loader"></button>
+    <button onclick="load()" class="light-button">Load from File</button>
+    <button onclick="reset()" id="resetButton" class="light-button">Reset</button>
+    <button onclick="resetWithCurrentOutput()" id="resetWithOuputButton" class="light-button">Reset W/ Current
+      Output</button>
+    <button onclick="copyOutput()" id="copyOutputButton" class="light-button">Copy Output</button>
+  </div>
+  <div class="button-container">
+    <input type="text" name="text" class="light-input" placeholder="INPUT" id="inputs">
+  </div>
+
+  <!--Speed Slider
+  <div>
+    <label for="speedSlider">Speed:</label><br>
+    <input type="range" min="0" max="1000" value="500" id="speedSlider" name="speedSlider">
+  </div>
+--> 
+
+<div class="PB-range-slider slider_container">
+  <input type="range" min="0" max="100" value="50" class="PB-range-slider" id="speedslider">
+  <p class="PB-range-slidervalue"></p>
+  </div>
 </div>
 
-<!--Post Execution Buttons-->
-<div class="button-bar">
-  <button onclick="reset()" id="resetButton" class="light-button">Reset</button>
-  <button onclick="resetWithCurrentOutput()" id="resetWithOuputButton" class="light-button">Reset With Current Output</button>
-  <button onclick="copyOutput()" id="copyOutputButton" class="light-button">Copy Output</button>
-</div>
 
-<!--Speed Slider-->
-<div>
-  <label for="speedSlider">Speed:</label><br>
-  <input type="range" min="0" max="1000" value="500" id="speedSlider" name="speedSlider">
-</div>
+  <!--Machine Graphics-->
+  <div id="tapes">
+  </div>
 
-<!--Machine Graphics-->
-<div id="tapes">
-</div>
-
-<!--Information-->
-<div id="info">
-  <span class="textCenter">
+  <!--Information-->
+  <div id="info">
+    <span class="textCenter">
       <p id="currentState">Current State: </p>
       <p id="recognizeText">N/A</p>
-  </span>
-</div>
+    </span>
+  </div>
 
-<!--Scripts-->
-<script src="examples.js"></script>
-<script src="index.js"></script>
+  <!--Scripts-->
+  <script src="examples.js"></script>
+  <script src="index.js"></script>
 </body>
 
 </html>
