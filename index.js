@@ -26,6 +26,14 @@ for(let selector of exampleSelectors) {
     }
 }
 
+// Initialize example value from already selected example
+for(let selector of exampleSelectors) {
+    if(selector.checked) {
+        exampleValue = selector.value;
+    }
+}
+exampleValue = exampleValue ?? "quickStart";
+
 const fr = new FileReader();
 loader.addEventListener('change', (event) => {
     fr.readAsText(loader.files[0]);
