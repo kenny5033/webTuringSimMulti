@@ -465,3 +465,9 @@ input:hover {
   margin-bottom: 50px;
   /* Add a box shadow */
 }
+
+.instructions-container{
+  padding: 20px;
+  margin: 20px auto;
+  width: 90%;
+}
