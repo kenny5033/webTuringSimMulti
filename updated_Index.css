@@ -248,6 +248,7 @@ input{
     margin: 5px 0;
     cursor: pointer;
     transition: .3s;
+    margin-bottom: 25px;
   }
   
   .label:hover,
