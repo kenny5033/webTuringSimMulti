@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 
 <head>
-    <link rel="stylesheet" href="updated_index.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 
-<body onload="setUpDarkMode()" class="background instructions-container">
+<body onload="setUpDarkMode()" class="background instructions-container instruction-text">
     <h1 class="center-div turing_title">Instruction Manual</h1>
     <hr class="divider">
     <div style="text-align: center;" class="examples_text">
@@ -16,7 +16,7 @@
                 href="https://www.cs.binghamton.edu/~software/tm/tmdoc.html">here</a>.</p>
     </div>
     <div id="programming" class="infoText">
-        <p class="sectionHeader">Programming the Machine</p>
+        <p class="sectionHeader header-text">Programming the Machine</p>
         <p>
             <span>All code must begin on the first line with "ATM" to specify that it is A Turing Machine
                 code.</span><br>
@@ -65,7 +65,7 @@
         </p>
     </div>
     <div id="running" class="infoText">
-        <p class="sectionHeader">Running the Machine</p>
+        <p class="sectionHeader header-text">Running the Machine</p>
         <p>
             <span>To run the Turing Machine, enter any string of characters from the input alphabet into the text area
                 labled "Input" (read about multiple input areas in the "Multitracking and Multitaping" section) and then
@@ -90,7 +90,7 @@
         </p>
     </div>
     <div id="multi" class="infoText">
-        <p class="sectionHeader">Mutitracking and Multitaping</p>
+        <p class="sectionHeader header-text">Mutitracking and Multitaping</p>
         <p>
             <span>To utilize multitracking, change the number of tracks for any given tape (for tape 0, the number of
                 tracks configuration is Line 6)</span><br>
@@ -118,7 +118,7 @@
         </p>
     </div>
     <div id="misc" class="infoText">
-        <p class="sectionHeader">Miscellaneous</p>
+        <p class="sectionHeader header-text">Miscellaneous</p>
         <p>
             <span>Example progams are included. To load an example, select one from the drop down menu labled
                 "Examples", and then press the "Load Example" button.</span><br>
@@ -146,9 +146,7 @@
 
 
     <!--Misc-->
-    <div id="darkModeButton">
-        <button onclick="toggleDarkMode()">Dark Mode</button>
-    </div>
+
     <div id="credits">
         <p>Created by Kenneth Howes and Lillian McAboy</p>
     </div>

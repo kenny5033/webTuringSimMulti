@@ -471,3 +471,15 @@ input:hover {
   margin: 20px auto;
   width: 90%;
 }
+
+.instruction-text{
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+  line-height: 1.5;
+}
+
+.header-text{
+  text-transform: uppercase;
+  font-size: 25px;
+  font-weight: bold;
+}
