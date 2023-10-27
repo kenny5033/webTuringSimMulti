@@ -114,10 +114,7 @@
     <button onclick="copyCode()" class="light-button">Copy</button>
     <button onclick="download()" class="light-button">Download</button>
     <input type="file" name="load" class="light-button" style="display:none" id="loader"></button>
-    <button onclick="load()" class="light-button">Load from File</button>   
-    <button onclick="reset()" id="resetButton" class="light-button">Reset</button>
-    <button onclick="resetWithCurrentOutput()" id="resetWithOuputButton" class="light-button">Reset With Current Output</button>
-    <button onclick="copyOutput()" id="copyOutputButton" class="light-button">Copy Output</button>
+    <button onclick="load()" class="light-button">Load from File</button>
   </div>
   <div class="button-container" id="inputs">
     <input type="text" name="text" class="light-input" placeholder="INPUT">
@@ -159,6 +156,12 @@
     </span>
   </div>
 
+  <div class="reset-button-bar">
+    <button onclick="reset()" id="resetButton" class="light-button">Reset</button>
+    <button onclick="resetWithCurrentOutput()" id="resetWithOuputButton" class="light-button">Reset With Current Output</button>
+    <button onclick="copyOutput()" id="copyOutputButton" class="light-button">Copy Output</button>
+  </div>
+
   <!--Misc-->
   <div class= "credits" id="credits">Created by Kenneth Howes and Lillian McAboy</div>
 
@@ -169,3 +172,5 @@
 </body>
 
 </html>
+
+  
