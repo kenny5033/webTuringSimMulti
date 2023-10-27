@@ -229,6 +229,7 @@ input{
 
 .block_container:last-child{
     flex: 1;
+    overflow: auto;
 }
 
 .block_container{
@@ -248,7 +249,7 @@ input{
     margin: 5px 0;
     cursor: pointer;
     transition: .3s;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
   }
   
   .label:hover,
