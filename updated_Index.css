@@ -198,9 +198,8 @@ input:hover {
   text-align: center;
   padding: 15px;
   border: 2px solid rgb(61, 61, 61);
-  margin-top: 20px;
-  margin-left: 150px;
-  margin-right: 150px;
+  margin: 20px auto;
+  width: 50%;
   box-shadow: 10px #000000;
   box-shadow: 5px 5px 10px rgb(116, 116, 116);
   /* Add a box shadow */
@@ -459,11 +458,10 @@ input:hover {
   text-align: center;
   padding: 15px;
   border: 2px solid rgb(61, 61, 61);
-  margin-top: 20px;
-  margin-left: 150px;
-  margin-right: 150px;
+  margin: 20px auto;
   box-shadow: 10px #000000;
   box-shadow: 5px 5px 10px rgb(116, 116, 116);
   width: 50%;
+  margin-bottom: 50px;
   /* Add a box shadow */
 }
