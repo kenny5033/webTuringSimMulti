@@ -1,3 +1,5 @@
+// Ctor-like stuff
+
 const inputs = document.getElementById("inputs");
 const machine = document.querySelector(".machineDiv");
 const speedInput = document.getElementById("speedSlider");
@@ -43,7 +45,10 @@ document.querySelector(".editor").addEventListener("keyup", () => {
     compileVisuals();
 });
 
-speedInput.addEventListener("mouseup", function() {
+// Speed isn't technically defined by this point... but will be before a user ever
+// gets to causing an appropriate event... and speed looks nicer being down there
+// with everyone else
+speedInput.addEventListener("mouseup", function() {   
     speed = 1001 - speedInput.value;
 }, false);
 
@@ -568,12 +573,11 @@ compileVisuals = () => {
         infiniteDirectionsPerTape.push(parseInt(removeComment(lines[parseInt(numberOfTapes) + 5 + i]).split(/\s+/)));
     }
 
-    console.log(numberOfTapes)
     // Set up input areas for input strings per track
     if(totalNumberOfTracks != previousTotalNumberOfTracks || numberOfTapes != previousNumberOfTapes.toString()) {
         inputs.innerHTML = "<input type=\"text\" name=\"text\" class=\"light-input\" placeholder=\"INPUT\" id=\"input0\" onchange=\"unsetInput()\"></input><br>"
         for(let i = 1; i < totalNumberOfTracks; i++) {
-            inputs.innerHTML += "<input type=\"text\" name=\"text\" class=\"light-input\" placeholder=\"INPUT\" id=\"input0\" onchange=\"unsetInput()\"></input><br>";
+            inputs.innerHTML += "<input type=\"text\" name=\"text\" class=\"light-input\" placeholder=\"INPUT\" id=\"input" + i + "\" onchange=\"unsetInput()\"></input><br>";
         }
         document.getElementById("input0").addEventListener("paste", (event) => {pasteInputStrings(event);})
 
@@ -591,7 +595,6 @@ compileVisuals = () => {
 
             // Construct the tape in html
             for(let j = 0; j < numberOfTracksPerTape[i]; j++) {
-                console.log("1");
                 tapes.innerHTML += "\
 <div class=\"machineDiv\" id=\"track" + i + j + "\">\n\
     <div class=\"square\" id=\"s\"></div>\n\
