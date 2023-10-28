@@ -199,7 +199,7 @@ input:hover {
   padding: 15px;
   border: 2px solid rgb(61, 61, 61);
   margin: 20px auto;
-  width: 50%;
+  width: 60%;
   box-shadow: 10px #000000;
   box-shadow: 5px 5px 10px rgb(116, 116, 116);
   /* Add a box shadow */
@@ -461,7 +461,7 @@ input:hover {
   margin: 20px auto;
   box-shadow: 10px #000000;
   box-shadow: 5px 5px 10px rgb(116, 116, 116);
-  width: 50%;
+  width: 60%;
   margin-bottom: 50px;
   /* Add a box shadow */
 }
